@@ -46,7 +46,7 @@ export default function Home() {
         }}
       />
       {/* for the below i am getting the access token */}
-      <button onClick={() => login()}>Sign in with Google 🚀</button>
+      <button  onClick={() => login()}>Sign in with Google 🚀</button>
       <button onClick={getemailinfo}>test make a call</button>
       <button onClick={getmessages}>test to get the messages</button>
     </div>
