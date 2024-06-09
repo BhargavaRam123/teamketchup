@@ -12,6 +12,7 @@ import React from "react";
 import Image from "next/image.js";
 import { motion } from "framer-motion";
 
+
 export default function Login() {
   const { accesstoken } = useSelector((state) => state.User);
   console.log("access token is:", accesstoken);
