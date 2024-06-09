@@ -105,7 +105,7 @@ export default function Login() {
       <motion.div className="relative"
       initial={{ opacity: 0 }} // Initial state before animation
       animate={{ opacity: 1  }} // Target state after animation
-      transition={{ duration: 0.2 }} // Duration of the animation
+      transition={{ duration: 3 }} // Duration of the animation
    
       >
       <Image className="object-cover w-128 h-32 text-4xl md:text-7xl font-bold align-center bg-clip-text text-transparent bg-gradient-to-b from-neutral-50 to-neutral-400 bg-opacity-50"
@@ -118,8 +118,8 @@ export default function Login() {
       
       <motion.div
       initial={{ opacity: 0 }} // Initial state before animation
-      animate={{ opacity: 1  }} // Target state after animation
-      transition={{ duration: 5 }} // Duration of the animation
+      animate={{ opacity: 4  }} // Target state after animation
+      transition={{ duration: 13 }} // Duration of the animation
       >
       <p className="mt-4 font-normal text-base text-neutral-300 max-w-lg text-center mx-auto">
       Our mission is simple: to enhance your email experience and boost productivity. How? With our AI-powered summaries! Just click on an email, and get a concise summary at your fingertips. It's the perfect condiment for your inbox!
