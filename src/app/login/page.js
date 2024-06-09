@@ -6,6 +6,8 @@ import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/navigation";
 import { setToken } from "../redux/slices/userslice.js";
+import Image from "next/image.js";
+
 export default function Login() {
   const { accesstoken } = useSelector((state) => state.User);
   console.log("access token is:", accesstoken);
