@@ -4,35 +4,64 @@ import { useEffect, useState } from "react";
 import { IoIosArrowRoundBack } from "react-icons/io";
 import { useSelector } from "react-redux";
 import { apiconnector } from "../services/apiconnector";
+
 export default function Logine({ params }) {
   const router = useRouter();
   const { accesstoken } = useSelector((state) => state.User);
   const [decodedcode, setdecodedcode] = useState("");
-  async function getmessageinfo() {
-    const messageResponse = await apiconnector(
-      "GET",
-      `https://gmail.googleapis.com/gmail/v1/users/me/messages/${params.id}`,
-      null,
-      {
-        Authorization: `Bearer ${accesstoken}`,
-      }
-    );
-    // console.log(messageResponse.data.payload.parts[1].body.data);
-    setdecodedcode(messageResponse.data.payload.parts[1].body.data);
-  }
-  // console.log("decodable code is:", decodedcode);
-  const result = decodeURIComponent(escape(decodedcode));
+  const [msghtml, setmsghtml] = useState("");
 
-  console.log("decoded html is", result);
   useEffect(() => {
-    getmessageinfo();
-  }, []);
+    async function fetchMessage() {
+      try {
+        const messageResponse = await apiconnector(
+          "GET",
+          `https://gmail.googleapis.com/gmail/v1/users/me/messages/${params.id}`,
+          null,
+          {
+            Authorization: `Bearer ${accesstoken}`,
+          }
+        );
+
+        const encodedMessage = messageResponse.data.payload.parts[1].body.data;
+        setdecodedcode(encodedMessage);
+      } catch (error) {
+        console.error("Error fetching message info:", error);
+      }
+    }
+
+    fetchMessage();
+  }, [accesstoken, params.id]);
+
+  useEffect(() => {
+    async function decodeMessage() {
+      if (decodedcode) {
+        try {
+          const decodeResponse = await apiconnector(
+            "POST",
+            `http://localhost:3001/api/decode`,
+            {
+              encodedstr: decodedcode,
+            }
+          );
+
+          setmsghtml(decodeResponse.data.decodedString);
+        } catch (error) {
+          console.error("Error decoding message:", error);
+        }
+      }
+    }
+
+    decodeMessage();
+  }, [decodedcode]);
+
   return (
     <>
-      <div className="">
+      <div>
         <div>
           <IoIosArrowRoundBack />
         </div>
+        <div dangerouslySetInnerHTML={{ __html: msghtml }} />
       </div>
     </>
   );
