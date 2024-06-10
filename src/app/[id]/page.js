@@ -10,6 +10,27 @@ export default function Logine({ params }) {
   const { accesstoken } = useSelector((state) => state.User);
   const [decodedcode, setdecodedcode] = useState("");
   const [msghtml, setmsghtml] = useState("");
+  const [summary, setsummary] = useState("");
+
+  async function aiapi() {
+    try {
+      const messageResponse = await apiconnector(
+        "POST",
+        `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=AIzaSyDVlwxL5yJYNN2IpsaepNCHxeGYzHjA93Y`,
+        {
+          contents: [
+            {
+              parts: [{ text: msghtml + "summarise this mail in a one liner" }],
+            },
+          ],
+        }
+      );
+      console.log("ai response", messageResponse);
+      setsummary(messageResponse.data.candidates[0].content.parts[0].text);
+    } catch (error) {
+      console.log("error occured in aiapi:", error);
+    }
+  }
 
   useEffect(() => {
     async function fetchMessage() {
@@ -55,9 +76,14 @@ export default function Logine({ params }) {
     decodeMessage();
   }, [decodedcode]);
 
+  useEffect(() => {
+    if (msghtml) aiapi();
+  }, [msghtml]);
   return (
     <>
       <div>
+        <h1>summary:{summary}</h1>
+        {/* <div onClick={aiapi}>click me</div> */}
         <div>
           <IoIosArrowRoundBack />
         </div>

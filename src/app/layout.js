@@ -16,7 +16,15 @@ export default function RootLayout({ children }) {
     <GoogleOAuthProvider clientId="801064546104-59ceuepf5flhunktpf3f5876og9jlqrg.apps.googleusercontent.com">
       <html lang="en">
         <Provider store={store}>
-          <body className={inter.className}>{children}</body>
+          <body className={inter.className}>
+            <header className="bg-white p-4 flex justify-between items-center shadow">
+              <h3>
+                KetchUp <strong>Mail.</strong>
+              </h3>
+              <div>{/* Add any header actions or user profile here */}</div>
+            </header>
+            {children}
+          </body>
         </Provider>
       </html>
     </GoogleOAuthProvider>

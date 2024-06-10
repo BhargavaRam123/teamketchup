@@ -105,12 +105,6 @@ export default function Home() {
 
   return (
     <div className="min-h-screen flex flex-col bg-gray-100 font-poppins">
-      <header className="bg-white p-4 flex justify-between items-center shadow">
-        <h3>
-          KetchUp <strong>Mail.</strong>
-        </h3>
-        <div>{/* Add any header actions or user profile here */}</div>
-      </header>
       <div className="flex flex-1 flex-col md:flex-row">
         <div className="w-full md:w-64 bg-white p-4 border-r border-gray-200">
           <nav>
