@@ -1,18 +1,21 @@
-"use client"
+"use client";
 import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { apiconnector } from "./services/apiconnector";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 export default function Home() {
+  const router = useRouter();
   const { accesstoken } = useSelector((state) => state.User);
   const [messages, setMessages] = useState([]);
   const [nextPageToken, setNextPageToken] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  console.log("access token is:", accesstoken);
+  // console.log("access token is:", accesstoken);
 
   async function fetchMessages(pageToken = null) {
+    console.log("fetching messages");
     setLoading(true);
     try {
       const params = new URLSearchParams({ maxResults: 5 });
@@ -42,12 +45,12 @@ export default function Home() {
           const { payload, snippet, internalDate } = messageResponse.data;
           const headers = payload.headers;
 
-          const senderHeader = headers.find(header => header.name === "From");
+          const senderHeader = headers.find((header) => header.name === "From");
           const sender = senderHeader ? senderHeader.value : "Unknown Sender";
 
           const time = new Date(parseInt(internalDate)).toLocaleString();
 
-          return { sender, snippet, time };
+          return { msgid: o.id, sender, snippet, time };
         })
       );
 
@@ -65,13 +68,16 @@ export default function Home() {
     }
   }, [accesstoken]);
 
+  function handleonclick(id) {
+    router.push(`/${id}`);
+  }
   return (
     <div className="min-h-screen flex flex-col bg-gray-100 font-poppins">
       <header className="bg-white p-4 flex justify-between items-center shadow">
-        <h3>KetchUp <strong>Mail.</strong></h3>
-        <div>
-          {/* Add any header actions or user profile here */}
-        </div>
+        <h3>
+          KetchUp <strong>Mail.</strong>
+        </h3>
+        <div>{/* Add any header actions or user profile here */}</div>
       </header>
       <div className="flex flex-1 flex-col md:flex-row">
         <div className="w-full md:w-64 bg-white p-4 border-r border-gray-200">
@@ -97,10 +103,24 @@ export default function Home() {
           {messages.length > 0 ? (
             <ul className="space-y-4">
               {messages.map((message, index) => (
-                <li key={index} className="flex flex-col md:flex-row p-4 bg-white shadow-md rounded-md mb-4">
-                  <p className="text-lg font-semibold md:w-1/3">{message.sender}</p>
-                  <p className="text-gray-600 md:w-1/3">{message.snippet.length > 50 ? `${message.snippet.substring(0, 50)}...` : message.snippet}</p>
-                  <p className="text-gray-400 j text-sm md:w-1/3">{message.time}</p>
+                <li
+                  onClick={() => {
+                    handleonclick(message.msgid);
+                  }}
+                  key={index}
+                  className="flex flex-col md:flex-row p-4 bg-white shadow-md rounded-md mb-4"
+                >
+                  <p className="text-lg font-semibold md:w-1/3">
+                    {message.sender}
+                  </p>
+                  <p className="text-gray-600 md:w-1/3">
+                    {message.snippet.length > 50
+                      ? `${message.snippet.substring(0, 50)}...`
+                      : message.snippet}
+                  </p>
+                  <p className="text-gray-400 j text-sm md:w-1/3">
+                    {message.time}
+                  </p>
                 </li>
               ))}
             </ul>
@@ -108,12 +128,14 @@ export default function Home() {
             <p>Loading</p>
           )}
           {nextPageToken && (
-            <button className="group/button min-h-9 mt-4 p-2 relative overflow-hidden rounded-md border border-red-500/20 bg-white px-4 py-1 text-xs font-medium text-red-500 transition-all duration-150 hover:border-red-500 active:scale-95"
-            onClick={() => fetchMessages(nextPageToken)}
-            disabled={loading}>
-            <span className="absolute bottom-0 left-0 z-0 h-0 w-full bg-gradient-to-t from-red-600 to-red-500 transition-all duration-500 group-hover/button:h-full" />
-            <span className="relative z-10 transition-all duration-500 group-hover/button:text-white">
-              {loading ? "Loading..." : "Load More"}
+            <button
+              className="group/button min-h-9 mt-4 p-2 relative overflow-hidden rounded-md border border-red-500/20 bg-white px-4 py-1 text-xs font-medium text-red-500 transition-all duration-150 hover:border-red-500 active:scale-95"
+              onClick={() => fetchMessages(nextPageToken)}
+              disabled={loading}
+            >
+              <span className="absolute bottom-0 left-0 z-0 h-0 w-full bg-gradient-to-t from-red-600 to-red-500 transition-all duration-500 group-hover/button:h-full" />
+              <span className="relative z-10 transition-all duration-500 group-hover/button:text-white">
+                {loading ? "Loading..." : "Load More"}
               </span>
             </button>
           )}
