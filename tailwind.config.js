@@ -10,15 +10,22 @@ module.exports = {
     "./components/**/*.{js,ts,jsx,tsx,mdx}",
  
     // Or if using `src` directory:
+    './node_modules/@rewind-ui/core/dist/theme/styles/*.js',
     "./src/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   darkMode: "class",
   theme: {
-    extend: {animation: 
+    
+    extend: {
+      fontFamily: {
+        poppins: ['Poppins', 'sans-serif'],
+      },
+      animation: 
       {
         shimmer: "shimmer 2s linear infinite",
       spotlight: "spotlight 2s ease .75s 1 forwards",
     },
+    
     keyframes: {
       shimmer: {
         from: {
@@ -41,7 +48,14 @@ module.exports = {
     },
   },
   },
-  plugins: [addVariablesForColors],
+  plugins: [addVariablesForColors,
+    require('@tailwindcss/typography'),
+    require('tailwind-scrollbar')({ nocompatible: true }),
+    require('@tailwindcss/forms')({
+      strategy: 'class' // only generate classes
+    })
+  ],
+  
 }
 
 function addVariablesForColors({ addBase, theme }) {
