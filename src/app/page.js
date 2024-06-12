@@ -4,8 +4,14 @@ import { useSelector } from "react-redux";
 import { apiconnector } from "./services/apiconnector";
 import React from "react";
 import { useRouter } from "next/navigation";
-import Header from "./header";
-
+import Header from "./components/header/header";
+import { RiCalendarTodoLine } from "react-icons/ri";
+import style from "./page.module.css";
+import { RiDraftLine } from "react-icons/ri";
+import { CiTrash } from "react-icons/ci";
+import { FaInbox } from "react-icons/fa";
+import { RiSpam2Line } from "react-icons/ri";
+import { LuSendHorizonal } from "react-icons/lu";
 export default function Home() {
   const router = useRouter();
 
@@ -15,29 +21,23 @@ export default function Home() {
 
   const MessageList = React.memo(({ messages }) => {
     return (
-      <ul className="space-y-4 ">
+      <div>
         {messages.map((message, index) => (
-          <li
+          <div
             key={index}
-            className="flex flex-col justify-between md:flex-row p-4 bg-slate-400 shadow-md rounded-md mb-4"
+            className={style.each}
             onClick={() => handleonclick(message.msgid)}
           >
-            <div className="flex flex-col">
-              <p className="text-lg font-bold">
-                {message.sender.split("<")[0].trim()}
-              </p>
-              <p className="text-gray-600 ">
-                {message.snippet.length > 10
-                  ? `${message.snippet.substring(0, 50)}...`
-                  : message.snippet}
-              </p>
+            <div className="">{message.sender.split("<")[0].trim()}</div>
+            <div className="">
+              {message.snippet.length > 10
+                ? `${message.snippet.substring(0, 50)}...`
+                : message.snippet}
             </div>
-            <p className=" text-gray-600 text-sm md:w-1/3 md:text-right">
-              {message.time}
-            </p>
-          </li>
+            <div className="">{message.time}</div>
+          </div>
         ))}
-      </ul>
+      </div>
     );
   });
 
@@ -51,7 +51,7 @@ export default function Home() {
       if (!accesstoken) return;
       setLoading(true);
       try {
-        const params = new URLSearchParams({ maxResults: 5 });
+        const params = new URLSearchParams({ maxResults: 15 });
         if (pageToken) {
           params.append("pageToken", pageToken);
         }
@@ -112,59 +112,50 @@ export default function Home() {
   }, [fetchMessages, accesstoken]);
 
   return (
-    <div className="min-h-screen flex flex-col bg-black font-poppins">
+    <>
       <Header />
-      <div className="flex flex-1 flex-col md:flex-row">
-        <div className="w-full mt-3 ml-3 backdrop-blur-3xl rounded-xl md:w-64 bg-slate-700 rounded-b-xl p-4 ">
-          <nav>
-            <ul className="space-y-2">
-              <li>
-                <a className="block p-2 text-gray-400 hover:bg-slate-800 rounded">
-                  Inbox
-                </a>
-              </li>
-              <li>
-                <a className="block p-2 text-gray-400 hover:bg-slate-800 rounded">
-                  Sent
-                </a>
-              </li>
-              <li>
-                <a className="block p-2 text-gray-400 hover:bg-slate-800 rounded">
-                  Drafts
-                </a>
-              </li>
-              <li>
-                <a className="block p-2 text-gray-400 hover:bg-slate-800 rounded">
-                  Trash
-                </a>
-              </li>
-            </ul>
-          </nav>
-        </div>
-
-        <div className="flex-1 mt-3 mr-3 ml-3 bg-slate-700 rounded-xl p-4 overflow-hidden">
-          <div className="overflow-y-auto h-full">
-            <h2 className=" text-gray-400 mb-4">Messages</h2>
-            {messages.length > 0 ? (
-              <MessageList messages={messages} />
-            ) : (
-              <p className="text-gray-400">Loading...</p>
-            )}
-            {nextPageToken && (
-              <button
-                className="group/button min-h-9 mt-4 p-2 relative overflow-hidden rounded-md border border-red-500/20 bg-white px-4 py-1 text-xs font-medium text-red-500 transition-all duration-150 hover:border-red-500 active:scale-95"
-                onClick={fetchMoreMessages}
-                disabled={loading}
-              >
-                <span className="absolute bottom-0 left-0 z-0 h-0 w-full bg-gradient-to-t from-red-600 to-red-500 transition-all duration-500 group-hover/button:h-full" />
-                <span className="relative z-10 transition-all duration-500 group-hover/button:text-white">
-                  {loading ? "Loading..." : "Load More"}
-                </span>
-              </button>
-            )}
+      <div className={style.maincontainer}>
+        <div className={style.sidecontainer}>
+          <div className={style.minis}>
+            <FaInbox className={style.iconsselect} />
+          </div>
+          <div className={style.mini}>
+            <RiCalendarTodoLine className={style.icons} />
+          </div>
+          <div className={style.mini}>
+            <RiDraftLine className={style.icons} />
+          </div>
+          <div className={style.mini}>
+            <CiTrash className={style.icons} />
+          </div>
+          <div className={style.mini}>
+            <LuSendHorizonal className={style.icons} />
+          </div>
+          <div className={style.mini}>
+            <RiSpam2Line className={style.icons} />
           </div>
         </div>
+
+        <div className={style.mcontainer}>
+          {messages.length > 0 ? (
+            <MessageList messages={messages} />
+          ) : (
+            <div className={style.lcontainer}>
+              <div className={style.loader}></div>
+            </div>
+          )}
+          {nextPageToken && (
+            <button
+              style={{ width: "200px" }}
+              className="group/button min-h-9 mt-4  p-2 relative overflow-hidden rounded-md border border-red-500/20 bg-white px-4 py-1 text-xs font-medium text-red-500 transition-all duration-150 hover:border-red-500 active:scale-95"
+              onClick={fetchMoreMessages}
+              disabled={loading}
+            >
+              {loading ? "Loading..." : "Load More"}
+            </button>
+          )}
+        </div>
       </div>
-    </div>
+    </>
   );
 }

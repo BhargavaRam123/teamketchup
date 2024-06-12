@@ -1,0 +1,12 @@
+.container {
+  position: fixed;
+  display: flex;
+  z-index: 999;
+  align-items: center;
+  height: 50px;
+  width: 100%;
+  background-color: #313146;
+}
+.lcon {
+  padding-left: 8px;
+}

@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
-
+import style from "./header.module.css";
+import Image from "next/image";
 const GrainyAnimation = () => (
   <motion.div
     className="absolute inset-0 bg-cover bg-center opacity-10"
@@ -12,14 +13,13 @@ const GrainyAnimation = () => (
 );
 
 const Header = () => (
-  <header className="bg-slate-700 mx-3 mt-3 border-white rounded-xl p-4 flex justify-between items-center shadow relative overflow-hidden">
-    <div className="absolute inset-0 z-0">
+  <header className={style.container}>
+    {/* <div className="absolute inset-0 z-0">
       <GrainyAnimation />
+    </div> */}
+    <div className={style.lcon}>
+      <Image src="/logo.png" width={35} height={35}></Image>
     </div>
-    <h3 className="font-light text-white relative z-10">
-      KetchUp <strong className="font-medium text-white">Mail.</strong>
-    </h3>
-    <div>{/* Add any header actions or user profile here */}</div>
   </header>
 );
 
