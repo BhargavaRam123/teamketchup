@@ -1,150 +1,173 @@
 .maincontainer {
-  display: flex;
+    display: flex;
 }
 .sidecontainer {
-  position: fixed;
-  display: flex;
-  flex-direction: column;
-  padding-top: 70px;
-  /* justify-content: space-between; */
-  align-items: center;
-  gap: 50px;
-  background-color: #313146;
-  width: 50px;
-  height: 100vh;
+    position: fixed;
+    display: flex;
+    flex-direction: column;
+    padding-top: 70px;
+    /* justify-content: space-between; */
+    align-items: center;
+    gap: 50px;
+    background-color: #313146;
+    width: 50px;
+    height: 100vh;
 }
 .mini {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 30px;
-  width: 47px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 30px;
+    width: 47px;
 }
 .icons {
-  height: 30px;
-  width: 30px;
-  color: rgb(212, 205, 205);
+    height: 30px;
+    width: 30px;
+    color: rgb(212, 205, 205);
 }
 .iconsselect {
-  height: 30px;
-  width: 30px;
-  color: rgb(240, 160, 12);
+    height: 30px;
+    width: 30px;
+    color: rgb(240, 160, 12);
 }
 .minis {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 30px;
-  width: 47px;
-  border-left: 3px solid rgb(240, 160, 12);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 30px;
+    width: 47px;
+    border-left: 3px solid rgb(240, 160, 12);
 }
 .mcontainer {
-  display: flex;
-  flex-direction: column;
-  height: auto;
-  /* width: 100vw; */
-  align-items: center;
-  background-color: lightyellow;
-  color: black;
-  padding-top: 80px;
-  padding-left: 50px;
+    display: flex;
+    flex-direction: column;
+    height: auto;
+    /* width: 100vw; */
+    align-items: center;
+    background-color: #161620;
+    color: white;
+    padding-top: 80px;
+    padding-left: 50px;
 }
 .each {
-  display: grid;
-  width: 100vw;
-  grid-template-columns: 25% 40% 25%;
-  gap: 100px;
-  padding: 10px 10px;
-  transition: background-color 0.3s linear;
+    display: grid;
+    width: 100vw;
+    grid-template-columns: 25% 40% 25%;
+    gap: 100px;
+    padding: 10px 10px;
+    border: 0 solid #32323b;
+    transition: background-color 0.3s linear;
 }
 /* 201616 */
 
 .each:hover {
-  background-color: #ffeea9;
-  cursor: pointer;
+    background-color: #32323b;
+    cursor: pointer;
 }
 
 .loader {
-  width: fit-content;
-  font-size: 32px; /* Increased font size */
-  font-family: monospace;
-  line-height: 1.4;
-  font-weight: bold;
-  background: linear-gradient(#000 0 0) left, linear-gradient(#000 0 0) right;
-  background-repeat: no-repeat;
-  border-right: 5px solid #0000;
-  border-left: 5px solid #0000;
-  background-origin: border-box;
-  position: relative;
-  animation: l9-0 2s infinite;
+    width: fit-content;
+    font-size: 32px; /* Increased font size */
+    font-family: monospace;
+    line-height: 1.4;
+    font-weight: bold;
+    background:
+        linear-gradient(#000 0 0) left,
+        linear-gradient(#000 0 0) right;
+    background-repeat: no-repeat;
+    border-right: 5px solid #0000;
+    border-left: 5px solid #0000;
+    background-origin: border-box;
+    position: relative;
+    animation: l9-0 2s infinite;
 }
 .loader::before {
-  content: "Loading";
+    content: "Loading";
 }
 .loader::after {
-  content: "";
-  position: absolute;
-  top: 100%;
-  left: 0;
-  width: 44px; /* Increased width */
-  height: 120px; /* Increased height */
-  background: linear-gradient(90deg, #000 4px, #0000 0 calc(100% - 4px), #000 0)
-      bottom / 44px 40px,
-    linear-gradient(90deg, red 4px, #0000 0 calc(100% - 4px), red 0) bottom 20px
-      left 0/44px 12px,
-    linear-gradient(#000 0 0) bottom 6px left 0 /44px 16px,
-    linear-gradient(#000 0 0) bottom 0 left 50%/16px 32px;
-  background-repeat: no-repeat;
-  animation: l9-1 2s infinite;
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 44px; /* Increased width */
+    height: 120px; /* Increased height */
+    background:
+        linear-gradient(90deg, #000 4px, #0000 0 calc(100% - 4px), #000 0)
+            bottom / 44px 40px,
+        linear-gradient(90deg, red 4px, #0000 0 calc(100% - 4px), red 0) bottom
+            20px left 0/44px 12px,
+        linear-gradient(#000 0 0) bottom 6px left 0 /44px 16px,
+        linear-gradient(#000 0 0) bottom 0 left 50%/16px 32px;
+    background-repeat: no-repeat;
+    animation: l9-1 2s infinite;
 }
 @keyframes l9-0 {
-  0%,
-  25% {
-    background-size: 50% 100%;
-  }
-  25.1%,
-  75% {
-    background-size: 0 0, 50% 100%;
-  }
-  75.1%,
-  100% {
-    background-size: 0 0, 0 0;
-  }
+    0%,
+    25% {
+        background-size: 50% 100%;
+    }
+    25.1%,
+    75% {
+        background-size:
+            0 0,
+            50% 100%;
+    }
+    75.1%,
+    100% {
+        background-size:
+            0 0,
+            0 0;
+    }
 }
 @keyframes l9-1 {
-  25% {
-    background-position: bottom, bottom 108px left 0, bottom 6px left 0,
-      bottom 0 left 50%;
-    left: 0;
-  }
-  25.1% {
-    background-position: bottom, bottom 20px left 0, bottom 6px left 0,
-      bottom 0 left 50%;
-    left: 0;
-  }
-  50% {
-    background-position: bottom, bottom 20px left 0, bottom 6px left 0,
-      bottom 0 left 50%;
-    left: calc(100% - 44px);
-  }
-  75% {
-    background-position: bottom, bottom 108px left 0, bottom 6px left 0,
-      bottom 0 left 50%;
-    left: calc(100% - 44px);
-  }
-  75.1% {
-    background-position: bottom, bottom 20px left 0, bottom 6px left 0,
-      bottom 0 left 50%;
-    left: calc(100% - 44px);
-  }
+    25% {
+        background-position:
+            bottom,
+            bottom 108px left 0,
+            bottom 6px left 0,
+            bottom 0 left 50%;
+        left: 0;
+    }
+    25.1% {
+        background-position:
+            bottom,
+            bottom 20px left 0,
+            bottom 6px left 0,
+            bottom 0 left 50%;
+        left: 0;
+    }
+    50% {
+        background-position:
+            bottom,
+            bottom 20px left 0,
+            bottom 6px left 0,
+            bottom 0 left 50%;
+        left: calc(100% - 44px);
+    }
+    75% {
+        background-position:
+            bottom,
+            bottom 108px left 0,
+            bottom 6px left 0,
+            bottom 0 left 50%;
+        left: calc(100% - 44px);
+    }
+    75.1% {
+        background-position:
+            bottom,
+            bottom 20px left 0,
+            bottom 6px left 0,
+            bottom 0 left 50%;
+        left: calc(100% - 44px);
+    }
 }
 
 .lcontainer {
-  /* position: relative; */
-  width: 100vw;
-  height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding-right: 80px;
+    /* position: relative; */
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-right: 80px;
 }

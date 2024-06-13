@@ -23,7 +23,7 @@ export default function Logine({ params }) {
               parts: [{ text: msghtml + "summarise this mail in a one liner" }],
             },
           ],
-        }
+        },
       );
       console.log("ai response", messageResponse);
       setsummary(messageResponse.data.candidates[0].content.parts[0].text);
@@ -41,7 +41,7 @@ export default function Logine({ params }) {
           null,
           {
             Authorization: `Bearer ${accesstoken}`,
-          }
+          },
         );
 
         const encodedMessage = messageResponse.data.payload.parts[1].body.data;
@@ -63,7 +63,7 @@ export default function Logine({ params }) {
             `http://localhost:3001/api/decode`,
             {
               encodedstr: decodedcode,
-            }
+            },
           );
 
           setmsghtml(decodeResponse.data.decodedString);

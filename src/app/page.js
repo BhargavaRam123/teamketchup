@@ -3,6 +3,7 @@ import { useState, useEffect, useCallback } from "react";
 import { useSelector } from "react-redux";
 import { apiconnector } from "./services/apiconnector";
 import React from "react";
+import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
 import Header from "./components/header/header";
 import { RiCalendarTodoLine } from "react-icons/ri";
@@ -12,6 +13,7 @@ import { CiTrash } from "react-icons/ci";
 import { FaInbox } from "react-icons/fa";
 import { RiSpam2Line } from "react-icons/ri";
 import { LuSendHorizonal } from "react-icons/lu";
+
 export default function Home() {
   const router = useRouter();
 
@@ -62,7 +64,7 @@ export default function Home() {
           null,
           {
             Authorization: `Bearer ${accesstoken}`,
-          }
+          },
         );
 
         const messageDetails = await Promise.all(
@@ -73,20 +75,20 @@ export default function Home() {
               null,
               {
                 Authorization: `Bearer ${accesstoken}`,
-              }
+              },
             );
             const { payload, snippet, internalDate } = messageResponse.data;
             const headers = payload.headers;
 
             const senderHeader = headers.find(
-              (header) => header.name === "From"
+              (header) => header.name === "From",
             );
             const sender = senderHeader ? senderHeader.value : "Unknown Sender";
 
             const time = new Date(parseInt(internalDate)).toLocaleString();
 
             return { msgid: o.id, sender, snippet, time };
-          })
+          }),
         );
 
         setMessages((prevMessages) => [...prevMessages, ...messageDetails]);
@@ -97,7 +99,7 @@ export default function Home() {
         setLoading(false);
       }
     },
-    [accesstoken]
+    [accesstoken],
   );
 
   const fetchMoreMessages = useCallback(() => {
@@ -140,8 +142,47 @@ export default function Home() {
           {messages.length > 0 ? (
             <MessageList messages={messages} />
           ) : (
-            <div className={style.lcontainer}>
-              <div className={style.loader}></div>
+            <div className="flex h-full w-full items-center justify-center">
+              <div className="flex space-x-2">
+                <motion.div
+                  className="h-16 w-16 rounded-full bg-red-500"
+                  animate={{
+                    scale: [1, 1.5, 1],
+                    opacity: [0.5, 1, 0.5],
+                  }}
+                  transition={{
+                    duration: 1,
+                    ease: "easeInOut",
+                    repeat: Infinity,
+                  }}
+                />
+                <motion.div
+                  className="h-3 w-3 rounded-full bg-red-500"
+                  animate={{
+                    scale: [1, 1.5, 1],
+                    opacity: [0.5, 1, 0.5],
+                  }}
+                  transition={{
+                    duration: 1,
+                    ease: "easeInOut",
+                    repeat: Infinity,
+                    delay: 0.3,
+                  }}
+                />
+                <motion.div
+                  className="h-3 w-3 rounded-full bg-red-500"
+                  animate={{
+                    scale: [1, 1.5, 1],
+                    opacity: [0.5, 1, 0.5],
+                  }}
+                  transition={{
+                    duration: 1,
+                    ease: "easeInOut",
+                    repeat: Infinity,
+                    delay: 0.6,
+                  }}
+                />
+              </div>
             </div>
           )}
           {nextPageToken && (

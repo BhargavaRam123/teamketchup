@@ -1,0 +1,11 @@
+// Folder-specific settings
+//
+// For a full list of overridable settings, and general information on folder-specific settings,
+// see the documentation: https://zed.dev/docs/configuring-zed#folder-specific-settings
+{
+  "indent_guides": {
+    "enabled": true,
+    "coloring": "indent_aware",
+    "background_coloring": "indent_aware"
+  }
+}
