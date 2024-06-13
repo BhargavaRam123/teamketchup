@@ -3,7 +3,6 @@ import { useState, useEffect, useCallback } from "react";
 import { useSelector } from "react-redux";
 import { apiconnector } from "./services/apiconnector";
 import React from "react";
-import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
 import Header from "./components/header/header";
 import { RiCalendarTodoLine } from "react-icons/ri";
@@ -16,7 +15,7 @@ import { LuSendHorizonal } from "react-icons/lu";
 
 export default function Home() {
   const router = useRouter();
-
+  var arr = ["inbox", "todo", "drafts", "trash", "spam"];
   function handleonclick(id) {
     router.push(`/${id}`);
   }
@@ -42,14 +41,46 @@ export default function Home() {
       </div>
     );
   });
-
+  const Draftlist = React.memo(({ drafts }) => {
+    return (
+      <div>
+        {drafts.map((message, index) => (
+          <div
+            key={index}
+            className={style.each}
+            onClick={() => handleonclick(message.draftid)}
+          >
+            <div>subject:{message.payload.headers[3].value}</div>
+            {/* <div className="">{message.sender.split("<")[0].trim()}</div> */}
+            {/* <div className="">
+              {message.snippet.length > 10
+                ? `${message.snippet.substring(0, 50)}...`
+                : message.snippet}
+            </div> */}
+            <div className="">{message.payload.headers[1].value}</div>
+          </div>
+        ))}
+      </div>
+    );
+  });
+  const [show, setshow] = useState({
+    inbox: true,
+    drafts: false,
+    todo: false,
+    trash: false,
+    sent: false,
+    spam: false,
+  });
+  const [drafts, setdrafts] = useState([]);
   const { accesstoken } = useSelector((state) => state.User);
   const [messages, setMessages] = useState([]);
   const [nextPageToken, setNextPageToken] = useState(null);
+  const [dnextPageToken, setdNextPageToken] = useState(null);
   const [loading, setLoading] = useState(false);
 
   const fetchMessages = useCallback(
     async (pageToken = null) => {
+      setdrafts([]);
       if (!accesstoken) return;
       setLoading(true);
       try {
@@ -64,7 +95,7 @@ export default function Home() {
           null,
           {
             Authorization: `Bearer ${accesstoken}`,
-          },
+          }
         );
 
         const messageDetails = await Promise.all(
@@ -75,20 +106,20 @@ export default function Home() {
               null,
               {
                 Authorization: `Bearer ${accesstoken}`,
-              },
+              }
             );
             const { payload, snippet, internalDate } = messageResponse.data;
             const headers = payload.headers;
 
             const senderHeader = headers.find(
-              (header) => header.name === "From",
+              (header) => header.name === "From"
             );
             const sender = senderHeader ? senderHeader.value : "Unknown Sender";
 
             const time = new Date(parseInt(internalDate)).toLocaleString();
 
             return { msgid: o.id, sender, snippet, time };
-          }),
+          })
         );
 
         setMessages((prevMessages) => [...prevMessages, ...messageDetails]);
@@ -97,14 +128,97 @@ export default function Home() {
         console.error("Error fetching messages:", error);
       } finally {
         setLoading(false);
+        setshow({
+          inbox: true,
+          drafts: false,
+          todo: false,
+          trash: false,
+          sent: false,
+          spam: false,
+        });
       }
     },
-    [accesstoken],
+    [accesstoken]
+  );
+  const fetchDrafts = useCallback(
+    async (pageToken = null) => {
+      setdrafts([]);
+      if (!accesstoken) return;
+      setLoading(true);
+      try {
+        const params = new URLSearchParams({ maxResults: 15 });
+        if (pageToken) {
+          params.append("pageToken", pageToken);
+        }
+
+        const response = await apiconnector(
+          "GET",
+          `https://gmail.googleapis.com/gmail/v1/users/me/drafts?key=AIzaSyAMKyepL3tEMVz1Ip2l4-n74R85hVnlCUo`,
+          null,
+          {
+            Authorization: `Bearer ${accesstoken}`,
+          }
+        );
+        console.log("draft response:", response);
+        const messageDetails = await Promise.all(
+          response.data.drafts.map(async (o) => {
+            const messageResponse = await apiconnector(
+              "GET",
+              `https://gmail.googleapis.com/gmail/v1/users/me/drafts/${o.id}?key=AIzaSyAMKyepL3tEMVz1Ip2l4-n74R85hVnlCUo`,
+              null,
+              {
+                Authorization: `Bearer ${accesstoken}`,
+              }
+            );
+            console.log("res value:", messageResponse);
+            const { id, payload, internalDate, threadId } =
+              messageResponse.data.message;
+            const { headers } = messageResponse.headers;
+            return {
+              draftid: o.id,
+              id,
+              payload,
+              internalDate,
+              threadId,
+              headers,
+            };
+          })
+        );
+
+        setdrafts((prevMessages) => [...prevMessages, ...messageDetails]);
+        setdNextPageToken(response.data.nextPageToken);
+      } catch (error) {
+        console.error("Error fetching messages:", error);
+      } finally {
+        setLoading(false);
+        setshow({
+          inbox: false,
+          drafts: true,
+          todo: false,
+          trash: false,
+          sent: false,
+          spam: false,
+        });
+      }
+    },
+    [accesstoken]
   );
 
   const fetchMoreMessages = useCallback(() => {
     fetchMessages(nextPageToken);
   }, [fetchMessages, nextPageToken]);
+
+  function render() {
+    if (show.inbox) {
+      return <MessageList messages={messages} />;
+    } else if (show.drafts) {
+      return <Draftlist drafts={drafts} />;
+    } else if (show.spam) {
+    } else if (show.todo) {
+    } else if (show.trash) {
+    } else if (show.sent) {
+    }
+  }
 
   useEffect(() => {
     if (accesstoken) {
@@ -117,14 +231,14 @@ export default function Home() {
     <>
       <Header />
       <div className={style.maincontainer}>
-        <div className={style.sidecontainer}>
+        <div className={style.sidecontainer} onClick={fetchMessages}>
           <div className={style.minis}>
             <FaInbox className={style.iconsselect} />
           </div>
           <div className={style.mini}>
             <RiCalendarTodoLine className={style.icons} />
           </div>
-          <div className={style.mini}>
+          <div className={style.mini} onClick={fetchDrafts}>
             <RiDraftLine className={style.icons} />
           </div>
           <div className={style.mini}>
@@ -140,51 +254,13 @@ export default function Home() {
 
         <div className={style.mcontainer}>
           {messages.length > 0 ? (
-            <MessageList messages={messages} />
+            render()
           ) : (
-            <div className="flex h-full w-full items-center justify-center">
-              <div className="flex space-x-2">
-                <motion.div
-                  className="h-16 w-16 rounded-full bg-red-500"
-                  animate={{
-                    scale: [1, 1.5, 1],
-                    opacity: [0.5, 1, 0.5],
-                  }}
-                  transition={{
-                    duration: 1,
-                    ease: "easeInOut",
-                    repeat: Infinity,
-                  }}
-                />
-                <motion.div
-                  className="h-3 w-3 rounded-full bg-red-500"
-                  animate={{
-                    scale: [1, 1.5, 1],
-                    opacity: [0.5, 1, 0.5],
-                  }}
-                  transition={{
-                    duration: 1,
-                    ease: "easeInOut",
-                    repeat: Infinity,
-                    delay: 0.3,
-                  }}
-                />
-                <motion.div
-                  className="h-3 w-3 rounded-full bg-red-500"
-                  animate={{
-                    scale: [1, 1.5, 1],
-                    opacity: [0.5, 1, 0.5],
-                  }}
-                  transition={{
-                    duration: 1,
-                    ease: "easeInOut",
-                    repeat: Infinity,
-                    delay: 0.6,
-                  }}
-                />
-              </div>
+            <div className={style.lcontainer}>
+              <div className={style.loader}></div>
             </div>
           )}
+
           {nextPageToken && (
             <button
               style={{ width: "200px" }}

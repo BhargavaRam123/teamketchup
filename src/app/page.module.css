@@ -1,173 +1,149 @@
 .maincontainer {
-    display: flex;
+  display: flex;
 }
 .sidecontainer {
-    position: fixed;
-    display: flex;
-    flex-direction: column;
-    padding-top: 70px;
-    /* justify-content: space-between; */
-    align-items: center;
-    gap: 50px;
-    background-color: #313146;
-    width: 50px;
-    height: 100vh;
+  position: fixed;
+  display: flex;
+  flex-direction: column;
+  padding-top: 70px;
+  /* justify-content: space-between; */
+  align-items: center;
+  gap: 50px;
+  background-color: #313146;
+  width: 50px;
+  height: 100vh;
 }
 .mini {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 30px;
-    width: 47px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 30px;
+  width: 47px;
 }
 .icons {
-    height: 30px;
-    width: 30px;
-    color: rgb(212, 205, 205);
+  height: 30px;
+  width: 30px;
+  color: rgb(212, 205, 205);
 }
 .iconsselect {
-    height: 30px;
-    width: 30px;
-    color: rgb(240, 160, 12);
+  height: 30px;
+  width: 30px;
+  color: rgb(240, 160, 12);
 }
 .minis {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 30px;
-    width: 47px;
-    border-left: 3px solid rgb(240, 160, 12);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 30px;
+  width: 47px;
+  border-left: 3px solid rgb(240, 160, 12);
 }
 .mcontainer {
-    display: flex;
-    flex-direction: column;
-    height: auto;
-    /* width: 100vw; */
-    align-items: center;
-    background-color: #161620;
-    color: white;
-    padding-top: 80px;
-    padding-left: 50px;
+  display: flex;
+  flex-direction: column;
+  height: auto;
+  /* width: 100vw; */
+  align-items: center;
+  background-color: #161620;
+  color: white;
+  padding-top: 80px;
+  padding-left: 50px;
 }
 .each {
-    display: grid;
-    width: 100vw;
-    grid-template-columns: 25% 40% 25%;
-    gap: 100px;
-    padding: 10px 10px;
-    border: 0 solid #32323b;
-    transition: background-color 0.3s linear;
+  display: grid;
+  width: 100vw;
+  grid-template-columns: 25% 40% 25%;
+  gap: 100px;
+  padding: 10px 10px;
+  border: 0 solid #32323b;
+  transition: background-color 0.3s linear;
 }
 /* 201616 */
 
 .each:hover {
-    background-color: #32323b;
-    cursor: pointer;
-}
-
-.loader {
-    width: fit-content;
-    font-size: 32px; /* Increased font size */
-    font-family: monospace;
-    line-height: 1.4;
-    font-weight: bold;
-    background:
-        linear-gradient(#000 0 0) left,
-        linear-gradient(#000 0 0) right;
-    background-repeat: no-repeat;
-    border-right: 5px solid #0000;
-    border-left: 5px solid #0000;
-    background-origin: border-box;
-    position: relative;
-    animation: l9-0 2s infinite;
-}
-.loader::before {
-    content: "Loading";
-}
-.loader::after {
-    content: "";
-    position: absolute;
-    top: 100%;
-    left: 0;
-    width: 44px; /* Increased width */
-    height: 120px; /* Increased height */
-    background:
-        linear-gradient(90deg, #000 4px, #0000 0 calc(100% - 4px), #000 0)
-            bottom / 44px 40px,
-        linear-gradient(90deg, red 4px, #0000 0 calc(100% - 4px), red 0) bottom
-            20px left 0/44px 12px,
-        linear-gradient(#000 0 0) bottom 6px left 0 /44px 16px,
-        linear-gradient(#000 0 0) bottom 0 left 50%/16px 32px;
-    background-repeat: no-repeat;
-    animation: l9-1 2s infinite;
-}
-@keyframes l9-0 {
-    0%,
-    25% {
-        background-size: 50% 100%;
-    }
-    25.1%,
-    75% {
-        background-size:
-            0 0,
-            50% 100%;
-    }
-    75.1%,
-    100% {
-        background-size:
-            0 0,
-            0 0;
-    }
-}
-@keyframes l9-1 {
-    25% {
-        background-position:
-            bottom,
-            bottom 108px left 0,
-            bottom 6px left 0,
-            bottom 0 left 50%;
-        left: 0;
-    }
-    25.1% {
-        background-position:
-            bottom,
-            bottom 20px left 0,
-            bottom 6px left 0,
-            bottom 0 left 50%;
-        left: 0;
-    }
-    50% {
-        background-position:
-            bottom,
-            bottom 20px left 0,
-            bottom 6px left 0,
-            bottom 0 left 50%;
-        left: calc(100% - 44px);
-    }
-    75% {
-        background-position:
-            bottom,
-            bottom 108px left 0,
-            bottom 6px left 0,
-            bottom 0 left 50%;
-        left: calc(100% - 44px);
-    }
-    75.1% {
-        background-position:
-            bottom,
-            bottom 20px left 0,
-            bottom 6px left 0,
-            bottom 0 left 50%;
-        left: calc(100% - 44px);
-    }
+  background-color: #32323b;
+  cursor: pointer;
 }
 
 .lcontainer {
-    /* position: relative; */
-    width: 100vw;
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding-right: 80px;
+  /* position: relative; */
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-right: 100px;
+  padding-bottom: 80px;
+}
+
+/* HTML: <div class="loader"></div> */
+.loader {
+  width: 70px; /* increased width */
+  height: 160px; /* increased height */
+  position: relative;
+}
+.loader:after {
+  content: "";
+  position: absolute;
+  inset: 0 0 40px; /* adjusted bottom inset */
+  border-radius: 30px 30px 20px 20px; /* adjusted border radius */
+  padding: 2px; /* adjusted padding */
+  background: repeating-linear-gradient(-45deg, #91d2e2 0 16px, #1296a7 0 24px)
+    content-box; /* adjusted gradient steps */
+  --c: radial-gradient(farthest-side, #000 94%, #0000);
+  -webkit-mask: linear-gradient(#0000 0 0), var(--c) -20px -20px,
+    var(--c) 30px -28px, var(--c) 18px -12px, var(--c) -24px 18px,
+    var(--c) 28px 18px, var(--c) 46px 54px, var(--c) -16px 70px,
+    var(--c) 50% 50%, linear-gradient(#000 0 0);
+  mask: linear-gradient(#000 0 0), var(--c) -20px -20px, var(--c) 30px -28px,
+    var(--c) 18px -12px, var(--c) -24px 18px, var(--c) 28px 18px,
+    var(--c) 46px 54px, var(--c) -16px 70px, var(--c) 50% 50%,
+    linear-gradient(#0000 0 0);
+  -webkit-mask-composite: destination-out;
+  mask-composite: exclude, add, add, add, add, add, add, add, add;
+  -webkit-mask-repeat: no-repeat;
+  animation: l2 3s infinite;
+}
+.loader:before {
+  content: "";
+  position: absolute;
+  inset: 50% calc(50% - 8px) 0; /* adjusted position */
+  background: #e0a267;
+  border-radius: 100px; /* adjusted border radius */
+}
+@keyframes l2 {
+  0% {
+    -webkit-mask-size: auto, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0;
+  }
+  10% {
+    -webkit-mask-size: auto, 50px 50px, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0;
+  }
+  20% {
+    -webkit-mask-size: auto, 50px 50px, 50px 50px, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0;
+  }
+  30% {
+    -webkit-mask-size: auto, 50px 50px, 50px 50px, 60px 60px, 0 0, 0 0, 0 0, 0 0,
+      0 0;
+  }
+  40% {
+    -webkit-mask-size: auto, 50px 50px, 50px 50px, 60px 60px, 60px 60px, 0 0,
+      0 0, 0 0, 0 0;
+  }
+  50% {
+    -webkit-mask-size: auto, 50px 50px, 50px 50px, 60px 60px, 60px 60px,
+      50px 50px, 0 0, 0 0, 0 0;
+  }
+  60% {
+    -webkit-mask-size: auto, 50px 50px, 50px 50px, 60px 60px, 60px 60px,
+      50px 50px, 50px 50px, 0 0, 0 0;
+  }
+  70% {
+    -webkit-mask-size: auto, 50px 50px, 50px 50px, 60px 60px, 60px 60px,
+      50px 50px, 50px 50px, 50px 50px, 0 0;
+  }
+  80%,
+  100% {
+    -webkit-mask-size: auto, 50px 50px, 50px 50px, 60px 60px, 60px 60px,
+      50px 50px, 50px 50px, 50px 50px, 400% 400%;
+  }
 }
