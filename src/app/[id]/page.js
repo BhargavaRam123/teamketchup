@@ -12,6 +12,21 @@ export default function Logine({ params }) {
   const [msghtml, setMsgHtml] = useState("");
   const [summary, setSummary] = useState("");
 
+  const addAltToImages = (html) => {
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(html, "text/html");
+    const images = doc.getElementsByTagName("img");
+
+    for (let i = 0; i < images.length; i++) {
+      const img = images[i];
+      if (!img.alt) {
+        img.alt = "Missing alt text";
+      }
+    }
+
+    return doc.documentElement.innerHTML;
+  };
+
   async function aiapi() {
     try {
       const messageResponse = await apiconnector(
@@ -25,10 +40,9 @@ export default function Logine({ params }) {
           ],
         },
       );
-      console.log("ai response", messageResponse);
       setSummary(messageResponse.data.candidates[0].content.parts[0].text);
     } catch (error) {
-      console.log("error occured in aiapi:", error);
+      console.error("error occured in aiapi:", error);
     }
   }
 
@@ -43,7 +57,27 @@ export default function Logine({ params }) {
             Authorization: `Bearer ${accesstoken}`,
           },
         );
-        const encodedMessage = messageResponse.data.payload.parts[1].body.data;
+
+        let encodedMessage = null;
+        const parts = messageResponse.data.payload.parts;
+
+        if (parts) {
+          for (const part of parts) {
+            if (part.mimeType === "text/html" && part.body.data) {
+              encodedMessage = part.body.data;
+              break;
+            }
+          }
+        }
+
+        if (!encodedMessage && messageResponse.data.payload.body.data) {
+          encodedMessage = messageResponse.data.payload.body.data;
+        }
+
+        if (!encodedMessage) {
+          throw new Error("No suitable part found in the message payload");
+        }
+
         setDecodedCode(encodedMessage);
       } catch (error) {
         console.error("Error fetching message info:", error);
@@ -63,7 +97,7 @@ export default function Logine({ params }) {
               encodedstr: decodedcode,
             },
           );
-          setMsgHtml(decodeResponse.data.decodedString);
+          setMsgHtml(addAltToImages(decodeResponse.data.decodedString));
         } catch (error) {
           console.error("Error decoding message:", error);
         }
