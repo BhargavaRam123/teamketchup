@@ -8,9 +8,9 @@ import { apiconnector } from "../services/apiconnector";
 export default function Logine({ params }) {
   const router = useRouter();
   const { accesstoken } = useSelector((state) => state.User);
-  const [decodedcode, setdecodedcode] = useState("");
-  const [msghtml, setmsghtml] = useState("");
-  const [summary, setsummary] = useState("");
+  const [decodedcode, setDecodedCode] = useState("");
+  const [msghtml, setMsgHtml] = useState("");
+  const [summary, setSummary] = useState("");
 
   async function aiapi() {
     try {
@@ -26,7 +26,7 @@ export default function Logine({ params }) {
         },
       );
       console.log("ai response", messageResponse);
-      setsummary(messageResponse.data.candidates[0].content.parts[0].text);
+      setSummary(messageResponse.data.candidates[0].content.parts[0].text);
     } catch (error) {
       console.log("error occured in aiapi:", error);
     }
@@ -43,14 +43,12 @@ export default function Logine({ params }) {
             Authorization: `Bearer ${accesstoken}`,
           },
         );
-
         const encodedMessage = messageResponse.data.payload.parts[1].body.data;
-        setdecodedcode(encodedMessage);
+        setDecodedCode(encodedMessage);
       } catch (error) {
         console.error("Error fetching message info:", error);
       }
     }
-
     fetchMessage();
   }, [accesstoken, params.id]);
 
@@ -65,30 +63,45 @@ export default function Logine({ params }) {
               encodedstr: decodedcode,
             },
           );
-
-          setmsghtml(decodeResponse.data.decodedString);
+          setMsgHtml(decodeResponse.data.decodedString);
         } catch (error) {
           console.error("Error decoding message:", error);
         }
       }
     }
-
     decodeMessage();
   }, [decodedcode]);
 
   useEffect(() => {
     if (msghtml) aiapi();
   }, [msghtml]);
+
   return (
-    <>
-      <div>
-        <h1>summary:{summary}</h1>
-        {/* <div onClick={aiapi}>click me</div> */}
-        <div>
-          <IoIosArrowRoundBack />
-        </div>
-        <div dangerouslySetInnerHTML={{ __html: msghtml }} />
+    <div className="flex flex-col h-screen bg-gray-100">
+      {/* Header */}
+      <div className="flex items-center justify-between px-4 py-2 bg-white shadow-md">
+        <button
+          className="p-2 rounded-full hover:bg-gray-200 focus:outline-none"
+          onClick={() => router.back()}
+        >
+          <IoIosArrowRoundBack size={24} />
+        </button>
+        <div className="w-8" /> {/* Placeholder for additional header items */}
       </div>
-    </>
+
+      {/* Main Content */}
+      <div className="flex-grow p-4 overflow-auto">
+        {/* Summary */}
+        <div className="mb-4 p-4 bg-white rounded-md shadow-md">
+          <h2 className="text-lg font-semibold mb-2">Summary</h2>
+          <p>{summary}</p>
+        </div>
+
+        {/* Email Content */}
+        <div className="p-4 bg-white rounded-md shadow-md">
+          <div dangerouslySetInnerHTML={{ __html: msghtml }} />
+        </div>
+      </div>
+    </div>
   );
 }
