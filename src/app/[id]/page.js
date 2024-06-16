@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { IoIosArrowRoundBack } from "react-icons/io";
 import { useSelector } from "react-redux";
 import { apiconnector } from "../services/apiconnector";
+import { AnimatePresence, motion } from 'framer-motion';
 import ComposeModal from '../components/compose/composeModal'; // Adjust the path as needed
 
 export default function Logine({ params }) {
@@ -146,7 +147,20 @@ export default function Logine({ params }) {
       </div>
 
       {/* Compose Modal */}
+      {/* Compose Modal */}
+<AnimatePresence>
+  {showModal && (
+    <motion.div
+      initial={{ opacity: 0, scale: 0.9 }}
+      animate={{ opacity: 1, scale: 1 }}
+      exit={{ opacity: 0, scale: 0.9 }}
+      transition={{ duration: 0.3 }}
+      className="fixed inset-0 z-10 flex items-center justify-center"
+    >
       <ComposeModal showModal={showModal} setShowModal={setShowModal} />
+    </motion.div>
+  )}
+</AnimatePresence>
     </div>
   );
 }
