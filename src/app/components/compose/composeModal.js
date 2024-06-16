@@ -47,8 +47,8 @@ const ComposeModal = ({ showModal, setShowModal }) => {
 
   return (
     showModal && (
-      <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center">
-        <div className="bg-white p-4 rounded-md shadow-md max-w-md w-full">
+        <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center">
+        <div className="bg-white p-4 rounded-md shadow-md w-full max-w-lg max-h-[80vh] overflow-y-auto">
           <h2 className="text-lg font-semibold mb-4">Compose Email</h2>
           <form onSubmit={sendMessage}>
             <div className="mb-4">
