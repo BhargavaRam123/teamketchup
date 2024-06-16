@@ -21,6 +21,13 @@ export default function RootLayout({ children }) {
   return (
     <GoogleOAuthProvider clientId="801064546104-59ceuepf5flhunktpf3f5876og9jlqrg.apps.googleusercontent.com">
       <html className={`${poppins.variable}`}>
+        <head>
+          {/* <meta charset="UTF-8"> */}
+          <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1.0"
+          ></meta>
+        </head>
         <Provider store={store}>
           <body>{children}</body>
         </Provider>

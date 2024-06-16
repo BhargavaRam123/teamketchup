@@ -12,35 +12,33 @@ import { CiTrash } from "react-icons/ci";
 import { FaInbox } from "react-icons/fa";
 import { RiSpam2Line } from "react-icons/ri";
 import { LuSendHorizonal } from "react-icons/lu";
-
+import { MessageList } from "./components/messagecomponent/message.js";
+import fetchMessages from "./services/fetchmessage/fechmessages";
+import fetchDrafts from "./services/fetchDrafts/fetchDrafts";
 export default function Home() {
   const router = useRouter();
   var arr = ["inbox", "todo", "drafts", "trash", "spam"];
+  const [togglev, settoggle] = useState(false);
+  const [show, setshow] = useState({
+    inbox: true,
+    drafts: false,
+    todo: false,
+    trash: false,
+    sent: false,
+    spam: false,
+  });
+  const [drafts, setdrafts] = useState([]);
+  const { accesstoken } = useSelector((state) => state.User);
+  const [messages, setMessages] = useState([]);
+  const [spam, setspam] = useState([]);
+  const [nextPageToken, setNextPageToken] = useState(null);
+  const [spamnextPageToken, spamsetNextPageToken] = useState(null);
+  const [dnextPageToken, setdNextPageToken] = useState(null);
+  const [loading, setLoading] = useState(false);
   function handleonclick(id) {
     router.push(`/${id}`);
   }
 
-  const MessageList = React.memo(({ messages }) => {
-    return (
-      <div>
-        {messages.map((message, index) => (
-          <div
-            key={index}
-            className={style.each}
-            onClick={() => handleonclick(message.msgid)}
-          >
-            <div className="">{message.sender.split("<")[0].trim()}</div>
-            <div className="">
-              {message.snippet.length > 10
-                ? `${message.snippet.substring(0, 50)}...`
-                : message.snippet}
-            </div>
-            <div className="">{message.time}</div>
-          </div>
-        ))}
-      </div>
-    );
-  });
   const Draftlist = React.memo(({ drafts }) => {
     return (
       <div>
@@ -63,146 +61,6 @@ export default function Home() {
       </div>
     );
   });
-  const [show, setshow] = useState({
-    inbox: true,
-    drafts: false,
-    todo: false,
-    trash: false,
-    sent: false,
-    spam: false,
-  });
-  const [drafts, setdrafts] = useState([]);
-  const { accesstoken } = useSelector((state) => state.User);
-  const [messages, setMessages] = useState([]);
-  const [nextPageToken, setNextPageToken] = useState(null);
-  const [dnextPageToken, setdNextPageToken] = useState(null);
-  const [loading, setLoading] = useState(false);
-
-  const fetchMessages = useCallback(
-    async (pageToken = null) => {
-      setdrafts([]);
-      if (!accesstoken) return;
-      setLoading(true);
-      try {
-        const params = new URLSearchParams({ maxResults: 15 });
-        if (pageToken) {
-          params.append("pageToken", pageToken);
-        }
-
-        const response = await apiconnector(
-          "GET",
-          `https://gmail.googleapis.com/gmail/v1/users/me/messages?${params.toString()}`,
-          null,
-          {
-            Authorization: `Bearer ${accesstoken}`,
-          }
-        );
-
-        const messageDetails = await Promise.all(
-          response.data.messages.map(async (o) => {
-            const messageResponse = await apiconnector(
-              "GET",
-              `https://gmail.googleapis.com/gmail/v1/users/me/messages/${o.id}`,
-              null,
-              {
-                Authorization: `Bearer ${accesstoken}`,
-              }
-            );
-            const { payload, snippet, internalDate } = messageResponse.data;
-            const headers = payload.headers;
-
-            const senderHeader = headers.find(
-              (header) => header.name === "From"
-            );
-            const sender = senderHeader ? senderHeader.value : "Unknown Sender";
-
-            const time = new Date(parseInt(internalDate)).toLocaleString();
-
-            return { msgid: o.id, sender, snippet, time };
-          })
-        );
-
-        setMessages((prevMessages) => [...prevMessages, ...messageDetails]);
-        setNextPageToken(response.data.nextPageToken);
-      } catch (error) {
-        console.error("Error fetching messages:", error);
-      } finally {
-        setLoading(false);
-        setshow({
-          inbox: true,
-          drafts: false,
-          todo: false,
-          trash: false,
-          sent: false,
-          spam: false,
-        });
-      }
-    },
-    [accesstoken]
-  );
-  const fetchDrafts = useCallback(
-    async (pageToken = null) => {
-      setdrafts([]);
-      if (!accesstoken) return;
-      setLoading(true);
-      try {
-        const params = new URLSearchParams({ maxResults: 15 });
-        if (pageToken) {
-          params.append("pageToken", pageToken);
-        }
-
-        const response = await apiconnector(
-          "GET",
-          `https://gmail.googleapis.com/gmail/v1/users/me/drafts?key=AIzaSyAMKyepL3tEMVz1Ip2l4-n74R85hVnlCUo`,
-          null,
-          {
-            Authorization: `Bearer ${accesstoken}`,
-          }
-        );
-        console.log("draft response:", response);
-        const messageDetails = await Promise.all(
-          response.data.drafts.map(async (o) => {
-            const messageResponse = await apiconnector(
-              "GET",
-              `https://gmail.googleapis.com/gmail/v1/users/me/drafts/${o.id}?key=AIzaSyAMKyepL3tEMVz1Ip2l4-n74R85hVnlCUo`,
-              null,
-              {
-                Authorization: `Bearer ${accesstoken}`,
-              }
-            );
-            console.log("res value:", messageResponse);
-            const { id, payload, internalDate, threadId } =
-              messageResponse.data.message;
-            const { headers } = messageResponse.headers;
-            return {
-              draftid: o.id,
-              id,
-              payload,
-              internalDate,
-              threadId,
-              headers,
-            };
-          })
-        );
-
-        setdrafts((prevMessages) => [...prevMessages, ...messageDetails]);
-        setdNextPageToken(response.data.nextPageToken);
-      } catch (error) {
-        console.error("Error fetching messages:", error);
-      } finally {
-        setLoading(false);
-        setshow({
-          inbox: false,
-          drafts: true,
-          todo: false,
-          trash: false,
-          sent: false,
-          spam: false,
-        });
-      }
-    },
-    [accesstoken]
-  );
 
   const fetchMoreMessages = useCallback(() => {
     fetchMessages(nextPageToken);
@@ -214,6 +72,7 @@ export default function Home() {
     } else if (show.drafts) {
       return <Draftlist drafts={drafts} />;
     } else if (show.spam) {
+      // return <MessageList messages={messages} />;
     } else if (show.todo) {
     } else if (show.trash) {
     } else if (show.sent) {
@@ -223,22 +82,53 @@ export default function Home() {
   useEffect(() => {
     if (accesstoken) {
       setMessages([]);
-      fetchMessages();
+      fetchMessages(
+        setMessages,
+        setLoading,
+        accesstoken,
+        apiconnector,
+        setNextPageToken,
+        setshow
+      );
     }
   }, [fetchMessages, accesstoken]);
 
   return (
     <>
-      <Header />
+      <Header settoggle={settoggle} togglev={togglev} />
       <div className={style.maincontainer}>
-        <div className={style.sidecontainer} onClick={fetchMessages}>
-          <div className={style.minis}>
+        <div className={togglev ? style.sidecontainert : style.sidecontainer}>
+          <div
+            className={style.minis}
+            onClick={() =>
+              fetchMessages(
+                setMessages,
+                setLoading,
+                accesstoken,
+                apiconnector,
+                setNextPageToken,
+                setshow
+              )
+            }
+          >
             <FaInbox className={style.iconsselect} />
           </div>
           <div className={style.mini}>
             <RiCalendarTodoLine className={style.icons} />
           </div>
-          <div className={style.mini} onClick={fetchDrafts}>
+          <div
+            className={style.mini}
+            onClick={() =>
+              fetchDrafts(
+                setdrafts,
+                setLoading,
+                apiconnector,
+                accesstoken,
+                setdNextPageToken,
+                setshow
+              )
+            }
+          >
             <RiDraftLine className={style.icons} />
           </div>
           <div className={style.mini}>

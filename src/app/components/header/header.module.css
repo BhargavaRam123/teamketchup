@@ -10,3 +10,17 @@
 .lcon {
   padding-left: 8px;
 }
+.mobile {
+  display: none;
+  width: 35px;
+  height: 35px;
+}
+
+@media only screen and (max-width: 600px) {
+  .mobile {
+    display: block;
+  }
+  .pc {
+    display: none;
+  }
+}

@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import style from "./header.module.css";
+import { IoReorderThree } from "react-icons/io5";
 import Image from "next/image";
 const GrainyAnimation = () => (
   <motion.div
@@ -12,15 +13,30 @@ const GrainyAnimation = () => (
   />
 );
 
-const Header = () => (
-  <header className={style.container}>
-    {/* <div className="absolute inset-0 z-0">
+const Header = ({ settoggle, togglev }) => {
+  function togglefunction(togglev) {
+    // console.log("toggle value:", togglev);
+    settoggle((p) => !p);
+  }
+
+  return (
+    <header className={style.container}>
+      {/* <div className="absolute inset-0 z-0">
       <GrainyAnimation />
     </div> */}
-    <div className={style.lcon}>
-      <Image src="/logo.png" width={35} height={35}></Image>
-    </div>
-  </header>
-);
+      <div className={style.lcon}>
+        <Image
+          src="/logo.png"
+          width={35}
+          height={35}
+          className={style.pc}
+        ></Image>
+        <div onClick={() => togglefunction(togglev)}>
+          <IoReorderThree className={style.mobile} />
+        </div>
+      </div>
+    </header>
+  );
+};
 
 export default Header;
