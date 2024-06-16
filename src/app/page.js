@@ -15,6 +15,7 @@ import { LuSendHorizonal } from "react-icons/lu";
 import { MessageList } from "./components/messagecomponent/message.js";
 import fetchMessages from "./services/fetchmessage/fechmessages";
 import fetchDrafts from "./services/fetchDrafts/fetchDrafts";
+import fetchmoreMessages from "./services/fetchmoremessages/fetchmoremessages";
 export default function Home() {
   const router = useRouter();
   var arr = ["inbox", "todo", "drafts", "trash", "spam"];
@@ -35,9 +36,6 @@ export default function Home() {
   const [spamnextPageToken, spamsetNextPageToken] = useState(null);
   const [dnextPageToken, setdNextPageToken] = useState(null);
   const [loading, setLoading] = useState(false);
-  function handleonclick(id) {
-    router.push(`/${id}`);
-  }
 
   const Draftlist = React.memo(({ drafts }) => {
     return (
@@ -62,10 +60,6 @@ export default function Home() {
     );
   });
 
-  const fetchMoreMessages = useCallback(() => {
-    fetchMessages(nextPageToken);
-  }, [fetchMessages, nextPageToken]);
-
   function render() {
     if (show.inbox) {
       return <MessageList messages={messages} />;
@@ -83,6 +77,7 @@ export default function Home() {
     if (accesstoken) {
       setMessages([]);
       fetchMessages(
+        nextPageToken,
         setMessages,
         setLoading,
         accesstoken,
@@ -155,7 +150,17 @@ export default function Home() {
             <button
               style={{ width: "200px" }}
               className="group/button min-h-9 mt-4  p-2 relative overflow-hidden rounded-md border border-red-500/20 bg-white px-4 py-1 text-xs font-medium text-red-500 transition-all duration-150 hover:border-red-500 active:scale-95"
-              onClick={fetchMoreMessages}
+              onClick={() =>
+                fetchmoreMessages(
+                  nextPageToken,
+                  setMessages,
+                  setLoading,
+                  accesstoken,
+                  apiconnector,
+                  setNextPageToken,
+                  setshow
+                )
+              }
               disabled={loading}
             >
               {loading ? "Loading..." : "Load More"}

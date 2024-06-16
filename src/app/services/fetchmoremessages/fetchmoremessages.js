@@ -1,4 +1,4 @@
-export default async function fetchMessages(
+export default async function fetchmoreMessages(
   nextPageToken,
   setMessages,
   setLoading,
@@ -7,7 +7,7 @@ export default async function fetchMessages(
   setNextPageToken,
   setshow
 ) {
-  setMessages([]);
+  //   setMessages([]);
   if (!accesstoken) return;
   setLoading(true);
   try {

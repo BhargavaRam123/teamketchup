@@ -1,6 +1,11 @@
 "use client";
 import style from "./message.module.css";
+import { useRouter } from "next/navigation";
 export function MessageList({ messages }) {
+  const router = useRouter();
+  function handleonclick(id) {
+    router.push(`/${id}`);
+  }
   return (
     <div>
       {messages.map((message, index) => (
