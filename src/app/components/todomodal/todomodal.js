@@ -12,7 +12,7 @@ const Todomodal = ({ showModal, setShowModal, messageid }) => {
     try {
       const response = await apiconnector(
         "POST",
-        "http://localhost:3001/api/store",
+        "https://lionfish-app-3qw8i.ondigitalocean.app/api/store",
         {
           email,
           name,

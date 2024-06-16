@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import { useSelector } from 'react-redux';
-import { apiconnector } from '../../services/apiconnector';
+import React, { useState, useEffect } from "react";
+import { useSelector } from "react-redux";
+import { apiconnector } from "../../services/apiconnector";
 
-const ComposeModal = ({ showModal, setShowModal, onSend }) => {
+const ComposeModal = ({ showModal, setShowModal }) => {
   const { accesstoken } = useSelector((state) => state.User);
   const [to, setTo] = useState("");
   const [cc, setCc] = useState("");
@@ -19,16 +19,21 @@ const ComposeModal = ({ showModal, setShowModal, onSend }) => {
           setTemplateLoading(true);
           const response = await apiconnector(
             "POST",
-            `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=AIzaSyDVlwxL5yJYNN2IpsaepNCHxeGYzHjA93Y`, 
+            `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=AIzaSyDVlwxL5yJYNN2IpsaepNCHxeGYzHjA93Y`,
             {
               contents: [
                 {
-                  parts: [{ text: `Subject: ${subject}\n${body} + "only give an email template, nothing else, just email template for any kind of request, forget previous prompts"` }],
+                  parts: [
+                    {
+                      text: `Subject: ${subject}\n${body} + "only give an email template, nothing else, just email template for any kind of request, forget previous prompts"`,
+                    },
+                  ],
                 },
               ],
             }
           );
-          const generatedTemplate = response.data.candidates[0].content.parts[0].text;
+          const generatedTemplate =
+            response.data.candidates[0].content.parts[0].text;
           setBody(generatedTemplate);
         } catch (error) {
           console.error("Error generating template:", error);
@@ -38,7 +43,6 @@ const ComposeModal = ({ showModal, setShowModal, onSend }) => {
         }
       }
     };
-
 
     if (generateTemplate) {
       generateEmailBody();
@@ -59,26 +63,27 @@ const ComposeModal = ({ showModal, setShowModal, onSend }) => {
     ].join("\n");
 
     const encodedEmail = btoa(unescape(encodeURIComponent(email)))
-      .replace(/\+/g, '-')
-      .replace(/\//g, '_')
-      .replace(/=+$/, '');
+      .replace(/\+/g, "-")
+      .replace(/\//g, "_")
+      .replace(/=+$/, "");
 
     try {
-      await apiconnector(
+      const response = await apiconnector(
         "POST",
         `https://gmail.googleapis.com/gmail/v1/users/me/messages/send`,
         { raw: encodedEmail },
         {
           Authorization: `Bearer ${accesstoken}`,
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         }
       );
-      alert('Message sent successfully!');
+      console.log("mail res", response);
+      alert("Message sent successfully!");
       setShowModal(false);
-      onSend();
+      // onSend();
     } catch (error) {
       console.error("Error sending message:", error);
-      alert('Failed to send message');
+      alert("Failed to send message");
     }
   };
 
@@ -89,7 +94,9 @@ const ComposeModal = ({ showModal, setShowModal, onSend }) => {
           <h2 className="text-lg font-semibold mb-4">Compose Email</h2>
           <form onSubmit={sendMessage}>
             <div className="mb-4">
-              <label className="block text-gray-700 mb-2" htmlFor="to">To</label>
+              <label className="block text-gray-700 mb-2" htmlFor="to">
+                To
+              </label>
               <input
                 className="w-full p-2 border border-gray-300 rounded"
                 type="email"
@@ -100,7 +107,9 @@ const ComposeModal = ({ showModal, setShowModal, onSend }) => {
               />
             </div>
             <div className="mb-4">
-              <label className="block text-gray-700 mb-2" htmlFor="cc">Cc</label>
+              <label className="block text-gray-700 mb-2" htmlFor="cc">
+                Cc
+              </label>
               <input
                 className="w-full p-2 border border-gray-300 rounded"
                 type="email"
@@ -110,7 +119,9 @@ const ComposeModal = ({ showModal, setShowModal, onSend }) => {
               />
             </div>
             <div className="mb-4">
-              <label className="block text-gray-700 mb-2" htmlFor="bcc">Bcc</label>
+              <label className="block text-gray-700 mb-2" htmlFor="bcc">
+                Bcc
+              </label>
               <input
                 className="w-full p-2 border border-gray-300 rounded"
                 type="email"
@@ -120,7 +131,9 @@ const ComposeModal = ({ showModal, setShowModal, onSend }) => {
               />
             </div>
             <div className="mb-4">
-              <label className="block text-gray-700 mb-2" htmlFor="subject">Subject</label>
+              <label className="block text-gray-700 mb-2" htmlFor="subject">
+                Subject
+              </label>
               <input
                 className="w-full p-2 border border-gray-300 rounded"
                 type="text"
@@ -131,7 +144,9 @@ const ComposeModal = ({ showModal, setShowModal, onSend }) => {
               />
             </div>
             <div className="mb-4">
-              <label className="block text-gray-700 mb-2" htmlFor="body">Body</label>
+              <label className="block text-gray-700 mb-2" htmlFor="body">
+                Body
+              </label>
               <textarea
                 className="w-full p-2 border border-gray-300 rounded"
                 id="body"
@@ -143,7 +158,10 @@ const ComposeModal = ({ showModal, setShowModal, onSend }) => {
               />
             </div>
             <div className="mb-4">
-              <label className="block text-gray-700 mb-2" htmlFor="generateTemplate">
+              <label
+                className="block text-gray-700 mb-2"
+                htmlFor="generateTemplate"
+              >
                 <input
                   type="checkbox"
                   id="generateTemplate"
@@ -167,7 +185,7 @@ const ComposeModal = ({ showModal, setShowModal, onSend }) => {
                 className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700"
                 disabled={templateLoading}
               >
-                {templateLoading ? 'Loading...' : 'Send'}
+                {templateLoading ? "Loading..." : "Send"}
               </button>
             </div>
           </form>

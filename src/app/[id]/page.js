@@ -95,7 +95,7 @@ export default function Logine({ params }) {
         try {
           const decodeResponse = await apiconnector(
             "POST",
-            `http://localhost:3001/api/decode`,
+            `https://lionfish-app-3qw8i.ondigitalocean.app/api/decode`,
             {
               encodedstr: decodedcode,
             }
