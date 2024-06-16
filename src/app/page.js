@@ -3,6 +3,7 @@ import { useState, useEffect, useCallback } from "react";
 import { useSelector } from "react-redux";
 import { apiconnector } from "./services/apiconnector";
 import React from "react";
+import { AnimatePresence, motion } from 'framer-motion';
 import { useRouter } from "next/navigation";
 import Header from "./components/header/header";
 import { RiCalendarTodoLine } from "react-icons/ri";
@@ -12,6 +13,7 @@ import { CiTrash } from "react-icons/ci";
 import { FaInbox } from "react-icons/fa";
 import { RiSpam2Line } from "react-icons/ri";
 import { LuSendHorizonal } from "react-icons/lu";
+import ComposeModal from "./components/compose/composeModal";
 import { MessageList } from "./components/messagecomponent/message.js";
 import fetchMessages from "./services/fetchmessage/fechmessages";
 import fetchDrafts from "./services/fetchDrafts/fetchDrafts";
@@ -36,6 +38,8 @@ export default function Home() {
   const [spamnextPageToken, spamsetNextPageToken] = useState(null);
   const [dnextPageToken, setdNextPageToken] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+
 
   const Draftlist = React.memo(({ drafts }) => {
     return (
@@ -60,6 +64,10 @@ export default function Home() {
     );
   });
 
+  const handleSendClick = () => {
+    setShowModal(true); 
+  };
+
   function render() {
     if (show.inbox) {
       return <MessageList messages={messages} />;
@@ -70,6 +78,7 @@ export default function Home() {
     } else if (show.todo) {
     } else if (show.trash) {
     } else if (show.send) {
+      
     }
   }
 
@@ -139,6 +148,7 @@ export default function Home() {
             <div className={show.send ? style.minis : style.mini}>
               <LuSendHorizonal
                 className={show.send ? style.iconsselect : style.icons}
+                onClick={handleSendClick}
               />
             </div>
             {/* <div className={style.mini}>
@@ -177,6 +187,19 @@ export default function Home() {
             )}
           </div>
         </div>
+        <AnimatePresence>
+  {showModal && (
+    <motion.div
+      initial={{ opacity: 0, scale: 0.9 }}
+      animate={{ opacity: 1, scale: 1 }}
+      exit={{ opacity: 0, scale: 0.9 }}
+      transition={{ duration: 0.3 }}
+      className="fixed inset-0 z-10 flex items-center justify-center"
+    >
+      <ComposeModal showModal={showModal} setShowModal={setShowModal} />
+    </motion.div>
+  )}
+</AnimatePresence>
       </>
     );
   else router.push("/login");
