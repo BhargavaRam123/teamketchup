@@ -12,9 +12,9 @@ export default async function fetchMessages(
   setLoading(true);
   try {
     const params = new URLSearchParams({ maxResults: 15 });
-    if (nextPageToken) {
-      params.append("pageToken", nextPageToken);
-    }
+    // if (nextPageToken) {
+    //   params.append("pageToken", nextPageToken);
+    // }
 
     const response = await apiconnector(
       "GET",

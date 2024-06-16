@@ -1,24 +1,23 @@
 import { motion } from "framer-motion";
 import style from "./header.module.css";
 import { IoReorderThree } from "react-icons/io5";
+import { IoIosLogOut } from "react-icons/io";
+import { logout } from "@/app/redux/slices/userslice";
+import { useDispatch } from "react-redux";
+import { ExitIcon } from "@radix-ui/react-icons";
 import Image from "next/image";
-const GrainyAnimation = () => (
-  <motion.div
-    className="absolute inset-0 bg-cover bg-center opacity-10"
-    style={{
-      backgroundImage: "url('path/to/grainy-texture.png')",
-    }}
-    animate={{ scale: [1, 1.05, 1] }}
-    transition={{ duration: 10, ease: "linear", loop: Infinity }}
-  />
-);
-
+import { useRouter } from "next/navigation";
 const Header = ({ settoggle, togglev }) => {
+  const dispatch = useDispatch();
+  const router = useRouter();
   function togglefunction(togglev) {
     // console.log("toggle value:", togglev);
     settoggle((p) => !p);
   }
-
+  function logoutfunction() {
+    dispatch(logout());
+    router.push("/login");
+  }
   return (
     <header className={style.container}>
       {/* <div className="absolute inset-0 z-0">
@@ -35,6 +34,11 @@ const Header = ({ settoggle, togglev }) => {
           <IoReorderThree className={style.mobile} />
         </div>
       </div>
+      <ExitIcon
+        onClick={logoutfunction}
+        style={{ width: "35px", height: "35px" }}
+        className={style.logout}
+      />
     </header>
   );
 };

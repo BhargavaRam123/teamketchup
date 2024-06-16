@@ -6,6 +6,7 @@
   height: 50px;
   width: 100%;
   background-color: #313146;
+  justify-content: space-between;
 }
 .lcon {
   padding-left: 8px;
@@ -14,6 +15,11 @@
   display: none;
   width: 35px;
   height: 35px;
+}
+
+.logout {
+  /* padding-right: 100px; */
+  color: rgb(240, 160, 12);
 }
 
 @media only screen and (max-width: 600px) {

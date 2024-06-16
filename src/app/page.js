@@ -25,7 +25,7 @@ export default function Home() {
     drafts: false,
     todo: false,
     trash: false,
-    sent: false,
+    send: false,
     spam: false,
   });
   const [drafts, setdrafts] = useState([]);
@@ -69,7 +69,7 @@ export default function Home() {
       // return <MessageList messages={messages} />;
     } else if (show.todo) {
     } else if (show.trash) {
-    } else if (show.sent) {
+    } else if (show.send) {
     }
   }
 
@@ -87,71 +87,16 @@ export default function Home() {
       );
     }
   }, [fetchMessages, accesstoken]);
-
-  return (
-    <>
-      <Header settoggle={settoggle} togglev={togglev} />
-      <div className={style.maincontainer}>
-        <div className={togglev ? style.sidecontainert : style.sidecontainer}>
-          <div
-            className={style.minis}
-            onClick={() =>
-              fetchMessages(
-                setMessages,
-                setLoading,
-                accesstoken,
-                apiconnector,
-                setNextPageToken,
-                setshow
-              )
-            }
-          >
-            <FaInbox className={style.iconsselect} />
-          </div>
-          <div className={style.mini}>
-            <RiCalendarTodoLine className={style.icons} />
-          </div>
-          <div
-            className={style.mini}
-            onClick={() =>
-              fetchDrafts(
-                setdrafts,
-                setLoading,
-                apiconnector,
-                accesstoken,
-                setdNextPageToken,
-                setshow
-              )
-            }
-          >
-            <RiDraftLine className={style.icons} />
-          </div>
-          <div className={style.mini}>
-            <CiTrash className={style.icons} />
-          </div>
-          <div className={style.mini}>
-            <LuSendHorizonal className={style.icons} />
-          </div>
-          <div className={style.mini}>
-            <RiSpam2Line className={style.icons} />
-          </div>
-        </div>
-
-        <div className={style.mcontainer}>
-          {messages.length > 0 ? (
-            render()
-          ) : (
-            <div className={style.lcontainer}>
-              <div className={style.loader}></div>
-            </div>
-          )}
-
-          {nextPageToken && (
-            <button
-              style={{ width: "200px" }}
-              className="group/button min-h-9 mt-4  p-2 relative overflow-hidden rounded-md border border-red-500/20 bg-white px-4 py-1 text-xs font-medium text-red-500 transition-all duration-150 hover:border-red-500 active:scale-95"
+  if (accesstoken)
+    return (
+      <>
+        <Header settoggle={settoggle} togglev={togglev} />
+        <div className={style.maincontainer}>
+          <div className={togglev ? style.sidecontainert : style.sidecontainer}>
+            <div
+              className={show.inbox ? style.minis : style.mini}
               onClick={() =>
-                fetchmoreMessages(
+                fetchMessages(
                   nextPageToken,
                   setMessages,
                   setLoading,
@@ -161,13 +106,78 @@ export default function Home() {
                   setshow
                 )
               }
-              disabled={loading}
             >
-              {loading ? "Loading..." : "Load More"}
-            </button>
-          )}
+              <FaInbox
+                className={show.inbox ? style.iconsselect : style.icons}
+              />
+            </div>
+            <div className={show.todo ? style.minis : style.mini}>
+              <RiCalendarTodoLine
+                className={show.todo ? style.iconsselect : style.icons}
+              />
+            </div>
+            <div
+              className={show.drafts ? style.minis : style.mini}
+              onClick={() =>
+                fetchDrafts(
+                  setdrafts,
+                  setLoading,
+                  apiconnector,
+                  accesstoken,
+                  setdNextPageToken,
+                  setshow
+                )
+              }
+            >
+              <RiDraftLine
+                className={show.drafts ? style.iconsselect : style.icons}
+              />
+            </div>
+            {/* <div className={style.mini}>
+              <CiTrash className={style.icons} />
+            </div> */}
+            <div className={show.send ? style.minis : style.mini}>
+              <LuSendHorizonal
+                className={show.send ? style.iconsselect : style.icons}
+              />
+            </div>
+            {/* <div className={style.mini}>
+              <RiSpam2Line className={style.icons} />
+            </div> */}
+          </div>
+
+          <div className={style.mcontainer}>
+            {messages.length > 0 ? (
+              render()
+            ) : (
+              <div className={style.lcontainer}>
+                <div className={style.loader}></div>
+              </div>
+            )}
+
+            {nextPageToken && (
+              <button
+                style={{ width: "200px" }}
+                className="group/button min-h-9 mt-4  p-2 relative overflow-hidden rounded-md border border-red-500/20 bg-white px-4 py-1 text-xs font-medium text-red-500 transition-all duration-150 hover:border-red-500 active:scale-95"
+                onClick={() =>
+                  fetchmoreMessages(
+                    nextPageToken,
+                    setMessages,
+                    setLoading,
+                    accesstoken,
+                    apiconnector,
+                    setNextPageToken,
+                    setshow
+                  )
+                }
+                disabled={loading}
+              >
+                {loading ? "Loading..." : "Load More"}
+              </button>
+            )}
+          </div>
         </div>
-      </div>
-    </>
-  );
+      </>
+    );
+  else router.push("/login");
 }
