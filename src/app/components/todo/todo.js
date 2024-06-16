@@ -35,18 +35,22 @@ export default function Todo() {
 
   return (
     <div>
-      {arr.map((message, index) => (
-        <div key={index} className={styles.each}>
-          <div className={styles.heading}>
-            <a href={`/${message.messageid}`}>{message.messageid}</a>
+      {arr.length > 0 ? (
+        arr.map((message, index) => (
+          <div key={index} className={styles.each}>
+            <div className={styles.heading}>
+              <a href={`/${message.messageid}`}>{message.messageid}</a>
+            </div>
+            <div className={styles.o}>{message.name}</div>
+            <div className={styles.o}>{message.description}</div>
+            <div onClick={() => handledone(message._id)}>
+              <CheckIcon />
+            </div>
           </div>
-          <div className={styles.o}>{message.name}</div>
-          <div className={styles.o}>{message.description}</div>
-          <div onClick={() => handledone(message._id)}>
-            <CheckIcon />
-          </div>
-        </div>
-      ))}
+        ))
+      ) : (
+        <div>No Todos Added</div>
+      )}
     </div>
   );
 }

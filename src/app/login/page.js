@@ -11,7 +11,7 @@ import { useRouter } from "next/navigation";
 
 export default function Login() {
   const { accesstoken } = useSelector((state) => state.User);
-  console.log("access token is:", accesstoken);
+  // console.log("access token is:", accesstoken);
   const router = useRouter();
   const dispatch = useDispatch();
 
@@ -46,30 +46,6 @@ export default function Login() {
       router.push("/");
     },
   });
-
-  async function getemailinfo() {
-    const response = await apiconnector(
-      "GET",
-      "https://gmail.googleapis.com/gmail/v1/users/me/profile",
-      null,
-      {
-        Authorization: `Bearer ${accesstoken}`,
-      }
-    );
-    console.log("response:", response);
-  }
-
-  async function getmessages() {
-    const response = await apiconnector(
-      "GET",
-      "https://gmail.googleapis.com/gmail/v1/users/me/messages",
-      null,
-      {
-        Authorization: `Bearer ${accesstoken}`,
-      }
-    );
-    console.log("response:", response);
-  }
 
   return (
     <div className="h-screen w-full  flex md:items-center md:justify-center bg-white/[0.96] antialiased bg-grid-white/[0.02] relative overflow-hidden">

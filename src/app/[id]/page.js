@@ -34,7 +34,7 @@ export default function Logine({ params }) {
     try {
       const messageResponse = await apiconnector(
         "POST",
-        `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=AIzaSyDVlwxL5yJYNN2IpsaepNCHxeGYzHjA93Y`,
+        `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${process.env.NEXT_PUBLIC_gemini_key}`,
         {
           contents: [
             {
@@ -145,9 +145,6 @@ export default function Logine({ params }) {
           <div dangerouslySetInnerHTML={{ __html: msghtml }} />
         </div>
       </div>
-
-      {/* Compose Modal */}
-      {/* <ComposeModal showModal={showModal} setShowModal={setShowModal} /> */}
       <Todomodal
         showModal={showModal}
         setShowModal={setShowModal}

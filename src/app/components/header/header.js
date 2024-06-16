@@ -1,3 +1,4 @@
+"use client";
 import { motion } from "framer-motion";
 import style from "./header.module.css";
 import { IoReorderThree } from "react-icons/io5";
@@ -7,7 +8,7 @@ import { useDispatch } from "react-redux";
 import { ExitIcon } from "@radix-ui/react-icons";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-const Header = ({ settoggle, togglev }) => {
+const Headerelement = ({ settoggle, togglev }) => {
   const dispatch = useDispatch();
   const router = useRouter();
   function togglefunction(togglev) {
@@ -19,10 +20,7 @@ const Header = ({ settoggle, togglev }) => {
     router.push("/login");
   }
   return (
-    <header className={style.container}>
-      {/* <div className="absolute inset-0 z-0">
-      <GrainyAnimation />
-    </div> */}
+    <div className={style.container}>
       <div className={style.lcon}>
         <Image
           src="/logo.png"
@@ -34,13 +32,15 @@ const Header = ({ settoggle, togglev }) => {
           <IoReorderThree className={style.mobile} />
         </div>
       </div>
-      <ExitIcon
-        onClick={logoutfunction}
-        style={{ width: "35px", height: "35px" }}
-        className={style.logout}
-      />
-    </header>
+      <div>
+        <ExitIcon
+          onClick={logoutfunction}
+          style={{ width: "35px", height: "35px" }}
+          className={style.logout}
+        />
+      </div>
+    </div>
   );
 };
 
-export default Header;
+export default Headerelement;
