@@ -1,5 +1,5 @@
 "use client";
-
+import { Analytics } from "@vercel/analytics/react";
 import { Poppins } from "next/font/google";
 import { store } from "./redux/store";
 import { Provider } from "react-redux";
@@ -23,6 +23,7 @@ export default function RootLayout({ children }) {
       <html className={`${poppins.variable}`}>
         <Provider store={store}>
           <body>{children}</body>
+          <Analytics />
         </Provider>
       </html>
     </GoogleOAuthProvider>
