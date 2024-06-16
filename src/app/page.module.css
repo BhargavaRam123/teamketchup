@@ -41,7 +41,7 @@
 .mcontainer {
   display: flex;
   flex-direction: column;
-  height: 100vh;
+  height: auto;
   /* width: 100vw; */
   align-items: center;
   background-color: #161620;
