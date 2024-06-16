@@ -1,0 +1,32 @@
+.mcontainer {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  width: 100vw;
+  align-items: center;
+  background-color: #161620;
+  color: white;
+  padding-top: 80px;
+  padding-left: 50px;
+}
+.heading {
+  font-weight: bold;
+}
+.o {
+  font-weight: lighter;
+}
+.each {
+  display: flex;
+  width: 100vw;
+  grid-template-columns: 25% 40% 25%;
+  gap: 120px;
+  align-items: center;
+  padding: 10px 10px;
+  border: 0 solid #32323b;
+  transition: background-color 0.3s linear;
+}
+
+.each:hover {
+  background-color: #32323b;
+  /* cursor: pointer; */
+}

@@ -8,12 +8,45 @@ import React from "react";
 import Image from "next/image.js";
 import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
+
 export default function Login() {
   const { accesstoken } = useSelector((state) => state.User);
   console.log("access token is:", accesstoken);
   const router = useRouter();
-  // const [saccesstoken, setaccesstoken] = useState("");
   const dispatch = useDispatch();
+
+  async function fetchUserInfo(accessToken) {
+    try {
+      const response = await fetch(
+        "https://www.googleapis.com/oauth2/v2/userinfo",
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
+      const userInfo = await response.json();
+      return userInfo;
+    } catch (error) {
+      console.error("Failed to fetch user info:", error);
+    }
+  }
+
+  const login = useGoogleLogin({
+    scope: "https://mail.google.com",
+    onSuccess: async (tokenResponse) => {
+      const userInfo = await fetchUserInfo(tokenResponse.access_token);
+      dispatch(
+        setToken({
+          email: userInfo.email,
+          accesstoken: tokenResponse.access_token,
+        })
+      );
+      console.log("User info:", userInfo);
+      router.push("/");
+    },
+  });
+
   async function getemailinfo() {
     const response = await apiconnector(
       "GET",
@@ -38,18 +71,6 @@ export default function Login() {
     console.log("response:", response);
   }
 
-  const login = useGoogleLogin({
-    scope: "https://mail.google.com",
-    onSuccess: (tokenResponse) => {
-      dispatch(
-        setToken({
-          email: "",
-          accesstoken: tokenResponse.access_token,
-        })
-      );
-      router.push("/");
-    },
-  });
   return (
     <div className="h-screen w-full  flex md:items-center md:justify-center bg-white/[0.96] antialiased bg-grid-white/[0.02] relative overflow-hidden">
       <Spotlight

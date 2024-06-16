@@ -1,10 +1,11 @@
-"use client"
+"use client";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { IoIosArrowRoundBack } from "react-icons/io";
 import { useSelector } from "react-redux";
 import { apiconnector } from "../services/apiconnector";
-import ComposeModal from '../components/compose/composeModal'; // Adjust the path as needed
+import ComposeModal from "../components/compose/composeModal"; // Adjust the path as needed
+import Todomodal from "../components/todomodal/todomodal";
 
 export default function Logine({ params }) {
   const router = useRouter();
@@ -126,7 +127,7 @@ export default function Logine({ params }) {
           className="space-x-72 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700"
           onClick={() => setShowModal(true)}
         >
-          Compose
+          Add Todo?
         </button>
         <div className="w-8" /> {/* Placeholder for additional header items */}
       </div>
@@ -146,7 +147,12 @@ export default function Logine({ params }) {
       </div>
 
       {/* Compose Modal */}
-      <ComposeModal showModal={showModal} setShowModal={setShowModal} />
+      {/* <ComposeModal showModal={showModal} setShowModal={setShowModal} /> */}
+      <Todomodal
+        showModal={showModal}
+        setShowModal={setShowModal}
+        messageid={params.id}
+      />
     </div>
   );
 }

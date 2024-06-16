@@ -1,5 +1,6 @@
 "use client";
 import { useState, useEffect, useCallback } from "react";
+import Todo from "./components/todo/todo";
 import { useSelector } from "react-redux";
 import { apiconnector } from "./services/apiconnector";
 import React from "react";
@@ -68,6 +69,7 @@ export default function Home() {
     } else if (show.spam) {
       // return <MessageList messages={messages} />;
     } else if (show.todo) {
+      return <Todo />;
     } else if (show.trash) {
     } else if (show.send) {
     }
@@ -111,7 +113,20 @@ export default function Home() {
                 className={show.inbox ? style.iconsselect : style.icons}
               />
             </div>
-            <div className={show.todo ? style.minis : style.mini}>
+            <div
+              className={show.todo ? style.minis : style.mini}
+              onClick={() => {
+                setshow({
+                  inbox: false,
+                  drafts: false,
+                  todo: true,
+                  trash: false,
+                  sent: false,
+                  spam: false,
+                });
+              }}
+            >
+              {/* FIRST SEND THE TODOS TO BACKEND */}
               <RiCalendarTodoLine
                 className={show.todo ? style.iconsselect : style.icons}
               />
