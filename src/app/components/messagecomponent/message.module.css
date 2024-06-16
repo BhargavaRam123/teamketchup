@@ -9,8 +9,9 @@
 }
 
 .each:hover {
-  background-color: #32323b;
+  background-color: #f0f0f6;
   cursor: pointer;
+  border-radius: 15px;
 }
 .heading {
   font-weight: bold;

@@ -3,7 +3,7 @@ export default async function fetchDrafts(
   setLoading,
   apiconnector,
   accesstoken,
-  setdNextPageToken,
+  setNextPageToken,
   setshow
 ) {
   setdrafts([]);
@@ -50,7 +50,7 @@ export default async function fetchDrafts(
     );
 
     setdrafts((prevMessages) => [...prevMessages, ...messageDetails]);
-    setdNextPageToken(response.data.nextPageToken);
+    setNextPageToken(response.data.nextPageToken);
   } catch (error) {
     console.error("Error fetching messages:", error);
   } finally {

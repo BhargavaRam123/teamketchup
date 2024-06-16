@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect } from "react";
 import Todo from "./components/todo/todo";
 import { useSelector } from "react-redux";
 import styles from "./page.module.css";
@@ -11,18 +11,16 @@ import Headerelement from "./components/header/header";
 import { RiCalendarTodoLine } from "react-icons/ri";
 import style from "./page.module.css";
 import { RiDraftLine } from "react-icons/ri";
-import { CiTrash } from "react-icons/ci";
 import { FaInbox } from "react-icons/fa";
-import { RiSpam2Line } from "react-icons/ri";
 import { LuSendHorizonal } from "react-icons/lu";
 import ComposeModal from "./components/compose/composeModal";
 import { MessageList } from "./components/messagecomponent/message.js";
 import fetchMessages from "./services/fetchmessage/fechmessages";
 import fetchDrafts from "./services/fetchDrafts/fetchDrafts";
 import fetchmoreMessages from "./services/fetchmoremessages/fetchmoremessages";
+
 export default function Home() {
   const router = useRouter();
-  var arr = ["inbox", "todo", "drafts", "trash", "spam"];
   const [togglev, settoggle] = useState(false);
   const [show, setshow] = useState({
     inbox: true,
@@ -35,10 +33,7 @@ export default function Home() {
   const [drafts, setdrafts] = useState([]);
   const { accesstoken } = useSelector((state) => state.User);
   const [messages, setMessages] = useState([]);
-  const [spam, setspam] = useState([]);
   const [nextPageToken, setNextPageToken] = useState(null);
-  const [spamnextPageToken, spamsetNextPageToken] = useState(null);
-  const [dnextPageToken, setdNextPageToken] = useState(null);
   const [loading, setLoading] = useState(false);
   const [showModal, setShowModal] = useState(false);
 
@@ -97,14 +92,37 @@ export default function Home() {
 
   function render() {
     if (show.inbox) {
-      return <MessageList messages={messages} />;
+      return (
+        <>
+          <MessageList messages={messages} />
+          {nextPageToken && (
+            <button
+              style={{ width: "200px" }}
+              className={`group/button min-h-9 mt-4  p-2 relative overflow-hidden rounded-md border border-red-500/20 bg-white px-4 py-1 text-xs font-medium text-red-500 transition-all duration-150 hover:border-red-500 active:scale-95 ${
+                style.loadMoreButton
+              } ${loading ? style.loading : ""}`}
+              onClick={() =>
+                fetchmoreMessages(
+                  nextPageToken,
+                  setMessages,
+                  setLoading,
+                  accesstoken,
+                  apiconnector,
+                  setNextPageToken,
+                  setshow
+                )
+              }
+              disabled={loading}
+            >
+              {loading ? "Loading..." : "Load More"}
+            </button>
+          )}
+        </>
+      );
     } else if (show.drafts) {
       return <Draftlist drafts={drafts} />;
-    } else if (show.spam) {
-      // return <MessageList messages={messages} />;
     } else if (show.todo) {
       return <Todo />;
-    } else if (show.trash) {
     } else if (show.send) {
     }
   }
@@ -160,7 +178,6 @@ export default function Home() {
                 });
               }}
             >
-              {/* FIRST SEND THE TODOS TO BACKEND */}
               <RiCalendarTodoLine
                 className={show.todo ? style.iconsselect : style.icons}
               />
@@ -173,7 +190,7 @@ export default function Home() {
                   setLoading,
                   apiconnector,
                   accesstoken,
-                  setdNextPageToken,
+                  setNextPageToken,
                   setshow
                 )
               }
@@ -182,18 +199,12 @@ export default function Home() {
                 className={show.drafts ? style.iconsselect : style.icons}
               />
             </div>
-            {/* <div className={style.mini}>
-              <CiTrash className={style.icons} />
-            </div> */}
             <div className={show.send ? style.minis : style.mini}>
               <LuSendHorizonal
                 className={show.send ? style.iconsselect : style.icons}
                 onClick={handleSendClick}
               />
             </div>
-            {/* <div className={style.mini}>
-              <RiSpam2Line className={style.icons} />
-            </div> */}
           </div>
 
           <div className={style.mcontainer}>
@@ -203,27 +214,6 @@ export default function Home() {
               <div className={style.lcontainer}>
                 <div className={style.loader}></div>
               </div>
-            )}
-
-            {nextPageToken && (
-              <button
-                style={{ width: "200px" }}
-                className="group/button min-h-9 mt-4  p-2 relative overflow-hidden rounded-md border border-red-500/20 bg-white px-4 py-1 text-xs font-medium text-red-500 transition-all duration-150 hover:border-red-500 active:scale-95"
-                onClick={() =>
-                  fetchmoreMessages(
-                    nextPageToken,
-                    setMessages,
-                    setLoading,
-                    accesstoken,
-                    apiconnector,
-                    setNextPageToken,
-                    setshow
-                  )
-                }
-                disabled={loading}
-              >
-                {loading ? "Loading..." : "Load More"}
-              </button>
             )}
           </div>
         </div>
