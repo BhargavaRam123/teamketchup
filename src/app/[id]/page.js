@@ -1,9 +1,10 @@
-"use client";
+"use client"
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { IoIosArrowRoundBack } from "react-icons/io";
 import { useSelector } from "react-redux";
 import { apiconnector } from "../services/apiconnector";
+import ComposeModal from '../components/compose/composeModal'; // Adjust the path as needed
 
 export default function Logine({ params }) {
   const router = useRouter();
@@ -11,6 +12,7 @@ export default function Logine({ params }) {
   const [decodedcode, setDecodedCode] = useState("");
   const [msghtml, setMsgHtml] = useState("");
   const [summary, setSummary] = useState("");
+  const [showModal, setShowModal] = useState(false);
 
   const addAltToImages = (html) => {
     const parser = new DOMParser();
@@ -38,7 +40,7 @@ export default function Logine({ params }) {
               parts: [{ text: msghtml + "summarise this mail in a one liner" }],
             },
           ],
-        },
+        }
       );
       setSummary(messageResponse.data.candidates[0].content.parts[0].text);
     } catch (error) {
@@ -55,7 +57,7 @@ export default function Logine({ params }) {
           null,
           {
             Authorization: `Bearer ${accesstoken}`,
-          },
+          }
         );
 
         let encodedMessage = null;
@@ -95,7 +97,7 @@ export default function Logine({ params }) {
             `http://localhost:3001/api/decode`,
             {
               encodedstr: decodedcode,
-            },
+            }
           );
           setMsgHtml(addAltToImages(decodeResponse.data.decodedString));
         } catch (error) {
@@ -113,12 +115,18 @@ export default function Logine({ params }) {
   return (
     <div className="flex flex-col h-screen bg-gray-100">
       {/* Header */}
-      <div className="flex items-center justify-between px-4 py-2 bg-white shadow-md">
+      <div className="flex items-center px-4 py-2 bg-white shadow-md">
         <button
           className="p-2 rounded-full hover:bg-gray-200 focus:outline-none"
           onClick={() => router.back()}
         >
           <IoIosArrowRoundBack size={24} />
+        </button>
+        <button
+          className="space-x-72 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700"
+          onClick={() => setShowModal(true)}
+        >
+          Compose
         </button>
         <div className="w-8" /> {/* Placeholder for additional header items */}
       </div>
@@ -136,6 +144,9 @@ export default function Logine({ params }) {
           <div dangerouslySetInnerHTML={{ __html: msghtml }} />
         </div>
       </div>
+
+      {/* Compose Modal */}
+      <ComposeModal showModal={showModal} setShowModal={setShowModal} />
     </div>
   );
 }
