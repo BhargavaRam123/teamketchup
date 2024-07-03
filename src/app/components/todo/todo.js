@@ -12,7 +12,7 @@ export default function Todo() {
     try {
       const response = await apiconnector(
         "POST",
-        "https://lionfish-app-3qw8i.ondigitalocean.app/api/gettodo",
+        "https://octopus-app-6g5qm.ondigitalocean.app/api/gettodo",
         { email }
       );
       console.log("response", response);
@@ -28,7 +28,7 @@ export default function Todo() {
       console.log("hey", _id);
       const response = await apiconnector(
         "POST",
-        "https://lionfish-app-3qw8i.ondigitalocean.app/api/delete",
+        "https://octopus-app-6g5qm.ondigitalocean.app/api/delete",
         { _id }
       );
       console.log("response", response);
